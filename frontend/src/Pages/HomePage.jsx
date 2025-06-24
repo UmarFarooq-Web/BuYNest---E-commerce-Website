@@ -5,7 +5,7 @@ import banner from "/banner.png"
 import color from '../colors'
 import CategoryBar from '../Components/CategoryBar'
 import ProductCard from '../Components/ProductCard'
-import {ChevronRight} from 'lucide-react'
+import { ChevronRight } from 'lucide-react'
 import logo from "/logo.jpg"
 
 
@@ -38,12 +38,12 @@ const HomePage = () => {
 
           <div className='flex flex-col items-center'>
             <p className='text-2xl'>Want to have the <strong>ultimate customer</strong> experience?</p>
-            <h1 className='text-5xl font-bold'>Become a <span style={{color:color.Blue}} >member</span> today!</h1>
+            <h1 className='text-5xl font-bold'>Become a <span style={{ color: color.Blue }} >member</span> today!</h1>
             <button className='px-10 py-3 flex items-center text-white rounded  bg-[#3874FF] hover:bg-[#004DFF] border border-[#3874FF] hover:border-gray-500 cursor-pointer mt-5'>Sign up<ChevronRight className='mt-1' /></button>
           </div>
 
 
-          <hr className='my-10' />  
+          <hr className='my-10' />
 
 
         </div>
