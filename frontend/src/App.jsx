@@ -4,7 +4,7 @@ import HomePage from './Pages/HomePage'
 import ProductPage from "./Pages/ProductPage"
 import FilterProductSection from './Pages/FilterProductSection'
 import './App.css'
-import Cart from './Pages/Cart'
+import CheckoutPage from './Pages/CheckoutPage'
 
 
 function App() {
@@ -13,7 +13,7 @@ function App() {
     <>
       <BrowserRouter>
         <Routes>
-          <Route  path='/' element={<Cart/>} />
+          <Route  path='/' element={<CheckoutPage/>} />
         </Routes>
       </BrowserRouter>
     </>
