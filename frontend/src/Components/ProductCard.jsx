@@ -10,27 +10,27 @@ const ProductCard = () => {
             role="button"
             onMouseEnter={() => setIsHover(true)}
             onMouseLeave={() => setIsHover(false)}
-            className="block w-full max-w-[270px] sm:max-w-[300px] md:max-w-[380px] p-3 rounded-2xl bg-white border border-gray-200 shadow-sm hover:shadow-lg transition-all duration-300"
+            className="block w-full max-w-[200px] sm:max-w-[250px] md:max-w-[300px] p-3 rounded-2xl bg-white border border-gray-200 shadow-sm hover:shadow-lg transition-all duration-300"
         >
-            <div className="w-full h-48 sm:h-56 md:h-74 rounded-xl overflow-hidden flex items-center justify-center bg-gray-50">
+            <div className="w-full h-40 sm:h-56 md:h-60 rounded-xl overflow-hidden flex items-center justify-center bg-gray-50">
                 <img
                     src={banner}
                     className={`object-contain w-full h-full transition-transform duration-300 ${isHover ? "scale-110" : ""}`}
                 />
             </div>
 
-            <div className="mt-4 text-base sm:text-lg font-semibold line-clamp-2">
+            <div className="mt-2 text-base font-semibold line-clamp-2">
                 PlayStation 5 DualSense Wireless Controller
             </div>
 
-            <div className="mt-2 flex items-center gap-1">
+            <div className="mt-0.5 flex items-center gap-1">
                 <StarRatings
                     rating={4.5}
                     starRatedColor="#f97316" // Tailwind orange-500
                     numberOfStars={5}
                     name="rating"
-                    starDimension="18px"
-                    starSpacing="2px"
+                    starDimension="16px"
+                    starSpacing="1px"
                 />
                 <span className="text-sm text-gray-500">(45 reviews)</span>
             </div>
