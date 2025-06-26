@@ -6,32 +6,29 @@ import logo from "/logo.jpg"
 import { Country, State, City } from 'country-state-city';
 
 const CheckoutPage = () => {
-    const [States , setStates] = useState([])
-    const [Cities , setCities] = useState([])
+    const [States, setStates] = useState([])
+    const [Cities, setCities] = useState([])
 
-    const [SelectedState , setSelectedState] = useState('')
+    const [SelectedState, setSelectedState] = useState('')
 
     useEffect(() => {
-      const s =  State.getStatesOfCountry('PK');
-      setStates(s)
-      console.log(States);
-      console.log(s);
+        const s = State.getStatesOfCountry('PK');
+        setStates(s)
+        console.log(States);
+        console.log(s);
     }, [])
 
-    useEffect(()=>{
-        const s = City.getCitiesOfState('PK' , SelectedState)
+    useEffect(() => {
+        const s = City.getCitiesOfState('PK', SelectedState)
         setCities(s);
         console.log(s)
 
-    } , [SelectedState])
+    }, [SelectedState])
 
-    const HandStateChange = (e) =>{
+    const HandStateChange = (e) => {
         setSelectedState(e.target.value)
         console.log(e.target.value);
     }
-
-    
-
 
 
     return (
@@ -84,16 +81,16 @@ const CheckoutPage = () => {
                                     <div className='grow'>
                                         <div className='font-medium'>State</div>
                                         <select onChange={HandStateChange} style={{ backgroundColor: color.bg1 }} name="cardType" id="cardType" className=' text-[14px] p-2 text-gray-500 border w-full border-gray-300  rounded focus:border-blue-500  outline-0 outline-blue-500/20 outline-offset-0 focus:outline-4 transition-all duration-100'>
-                                            {States.length > 0 && States.map((e , i)=>(
-                                                <option value={e.isoCode}>{e.name}</option>                                                
+                                            {States.length > 0 && States.map((e, i) => (
+                                                <option value={e.isoCode}>{e.name}</option>
                                             ))}
                                         </select>
                                     </div>
                                     <div className='grow'>
                                         <div className='font-medium'>City</div>
                                         <select style={{ backgroundColor: color.bg1 }} name="cardType" id="cardType" className=' text-[14px] p-2 text-gray-500 border w-full border-gray-300 rounded focus:border-blue-500  outline-0 outline-blue-500/20 outline-offset-0 focus:outline-4 transition-all duration-100'>
-                                            {Cities.length > 0 && Cities.map((e , i)=>(
-                                                <option value={e.isoCode}>{e.name}</option>                                                
+                                            {Cities.length > 0 && Cities.map((e, i) => (
+                                                <option value={e.isoCode}>{e.name}</option>
                                             ))}
                                         </select>
                                     </div>
