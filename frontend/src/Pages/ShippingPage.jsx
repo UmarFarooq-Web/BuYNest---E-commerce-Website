@@ -117,20 +117,12 @@ const CheckoutPage = () => {
                         </div>
 
 
-
-
                     </div>
-
-
 
 
                 </div>
 
-
-
-
             </div>
-
 
             <div className='flex items-center justify-center flex-col bg-white px-6 mt-8'>
                 <div className='flex items-center justify-center gap-4'><img className='w-[100px]' src={logo} alt="" /> <span className='text-4xl' >Buy Nest</span></div>
