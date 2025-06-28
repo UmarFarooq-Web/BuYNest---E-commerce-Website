@@ -13,8 +13,8 @@ const CheckoutPage = () => {
 
     useEffect(() => {
         const s = State.getStatesOfCountry('PK')
-        setStates(s)
-        console.log(States)
+        setStates(s);
+        console.log(States);
         console.log(s);
     }, [])
 
