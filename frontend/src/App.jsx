@@ -5,6 +5,7 @@ import ProductPage from "./Pages/ProductPage"
 import FilterProductSection from './Pages/FilterProductSection'
 import './App.css'
 import ShippingPage from './Pages/ShippingPage'
+import HomeLayout from './Pages/HomeLayout'
 
 
 function App() {
@@ -13,7 +14,7 @@ function App() {
     <>
       <BrowserRouter>
         <Routes>
-          <Route  path='/' element={<ShippingPage/>} />
+          <Route  path='/' element={<HomeLayout/>} />
         </Routes>
       </BrowserRouter>
     </>
