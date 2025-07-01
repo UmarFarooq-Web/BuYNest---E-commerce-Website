@@ -1,18 +1,18 @@
 import React, { useState } from 'react'
 import color from '../colors'
 import logo from '/logo.jpg'
-import { Search, ShoppingCart, User, Menu , Home } from 'lucide-react'
-import { useSearchParams } from 'react-router-dom'
+import { Search, ShoppingCart, User, Menu, Home } from 'lucide-react'
+import { Outlet, useSearchParams } from 'react-router-dom'
 import { NavLink } from 'react-router-dom'
 
 const HomeLayout = () => {
     const [IsFocused, setIsFocused] = useState(false)
     const [isVisible, setIsVisible] = useState(false);
 
-     const navLink = [
-        {name:"Dashboard" , path:"/" , Icon:Home},
-        {name:"Add Product" , path:"/add-product" , Icon:User},
-     ]
+    const navLink = [
+        { name: "Dashboard", path: "/", Icon: Home },
+        { name: "Add Product", path: "/add-product", Icon: User },
+    ]
     return (
         <div className='relative'>
             {/* Navbar */}
@@ -35,15 +35,15 @@ const HomeLayout = () => {
                 {/* SideBar */}
                 <div style={{ backgroundColor: color.bg1 }} className={`h-screen overflow-y-auto w-full max-w-[250px] transition-all duration-500 xl:translate-x-0 xl:opacity-100 absolute xl:relative border-r border-gray-400 ${isVisible ? "translate-x-0 opacity-100 " : " -translate-x-[300px] opacity-0"} p-3 md:p-5 flex flex-col gap-1`}>
 
-                    {navLink.map(({name , path , Icon} , i)=>(
+                    {navLink.map(({ name, path, Icon }, i) => (
                         <NavLink key={i} to={path}
-                        end
-                        className={({isActive})=>
-                            `w-full py-1 px-2  rounded  hover:bg-gray-200 text-[15px] text-gray-700 ${isActive?` bg-[${color.Blue}] `:""}`
-                        }
-                         >
+                            end
+                            className={({ isActive }) =>
+                                `w-full py-1 px-2  rounded  hover:bg-gray-200 text-[15px]  group ${isActive ? 'text-blue-600' : "text-gray-700"}`
+                            }
+                        >
                             <div className='flex items-center gap-2'>
-                                <Icon/>{name}
+                                <Icon size={18} className={` `} />{name}
                             </div>
                         </NavLink>
                     ))}
@@ -52,7 +52,9 @@ const HomeLayout = () => {
 
 
                 {/* outlet */}
-                <div className='bg-green-500 h-screen w-full' >j</div>
+                <div className='bg-green-500 h-screen w-full' >
+                    <Outlet/>
+                </div>
             </div>
         </div>
     )
