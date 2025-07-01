@@ -6,6 +6,8 @@ import FilterProductSection from './Pages/FilterProductSection'
 import './App.css'
 import ShippingPage from './Pages/ShippingPage'
 import HomeLayout from './Pages/HomeLayout'
+import AdminDashboard from './Pages/AdminDashboard'
+import AdminAddProduct from './Pages/AdminAddProduct'
 
 
 function App() {
@@ -14,7 +16,10 @@ function App() {
     <>
       <BrowserRouter>
         <Routes>
-          <Route  path='/' element={<HomeLayout/>} />
+          <Route  path='/' element={<HomeLayout/>}>
+            <Route index element={<AdminDashboard/>} />
+            <Route path='/add-product' element={<AdminAddProduct/>} />
+          </Route>
         </Routes>
       </BrowserRouter>
     </>
