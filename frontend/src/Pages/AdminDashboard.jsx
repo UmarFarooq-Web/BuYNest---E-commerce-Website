@@ -3,7 +3,7 @@ import color from '../colors'
 import { CircleAlert, ClockFading, Star } from 'lucide-react'
 import TotalSalesLineGraph from '../Components/TotalSalesLineGraph';
 import { data } from 'react-router-dom';
-import TotalOrdersBarChart from '../Components/TotalOrdersBarChart';
+import TotalOrdersBarChart from '../Components/TotalOrdersBarChart'
 
 const AdminDashboard = () => {
     const [TotalSalesData, setTotalSalesData] = useState([
