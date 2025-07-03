@@ -235,7 +235,7 @@ const AdminDashboard = () => {
             Status: "PENDING",
             Time: 1719840000000
         }
-    ];
+    ]
 
     const RowsPerPage = 5;
     const [Page, setPage] = useState(0)
