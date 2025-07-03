@@ -14,9 +14,9 @@ const HomeLayout = () => {
         { name: "Add Product", path: "/add-product", Icon: User },
     ]
     return (
-        <div className='relative'>
+        <div className='relative h-screen '>
             {/* Navbar */}
-            <div className={` flex justify-center py-2 px-3 border-b border-gray-400`} style={{ backgroundColor: color.bg1 }}>
+            <div className={` flex justify-center py-2  px-3 border-b border-gray-400`} style={{ backgroundColor: color.bg1 }}>
                 <div className='w-[100%] flex justify-between'>
                     <div className="flex items-center gap-2">
                         <button onClick={() => { setIsVisible(!isVisible) }} className='cursor-pointer block xl:hidden' ><Menu /></button>
@@ -30,10 +30,10 @@ const HomeLayout = () => {
                 </div>
             </div>
 
+            <div className='flex h-[calc(100%-47px)] '>
             {/* Body */}
-            <div className='flex'>
                 {/* SideBar */}
-                <div style={{ backgroundColor: color.bg1 }} className={`h-screen overflow-y-auto w-full max-w-[250px] transition-all duration-500 xl:translate-x-0 xl:opacity-100 absolute xl:relative border-r border-gray-400 ${isVisible ? "translate-x-0 opacity-100 " : " -translate-x-[300px] opacity-0"} p-3 md:p-5 flex flex-col gap-1`}>
+                <div style={{ backgroundColor: color.bg1 }} className={`w-full h-[calc(100%-47px)] max-w-[250px] transition-all duration-500 xl:translate-x-0 z-10 xl:opacity-100 absolute xl:relative border-r border-gray-400 ${isVisible ? "translate-x-0 opacity-100 " : " -translate-x-[300px] opacity-0"} p-3 md:p-5 flex flex-col gap-1`}>
 
                     {navLink.map(({ name, path, Icon }, i) => (
                         <NavLink key={i} to={path}
@@ -52,7 +52,7 @@ const HomeLayout = () => {
 
 
                 {/* outlet */}
-                <div className='bg-green-500 h-screen w-full' >
+                <div className='bg-green-500 overflow-y-auto h-full w-full relative z-[1]' >
                     <Outlet/>
                 </div>
             </div>

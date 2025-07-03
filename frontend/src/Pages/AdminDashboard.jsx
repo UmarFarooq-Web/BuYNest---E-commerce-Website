@@ -3,6 +3,7 @@ import color from '../colors'
 import { CircleAlert, ClockFading, Star } from 'lucide-react'
 import TotalSalesLineGraph from '../Components/TotalSalesLineGraph';
 import { data } from 'react-router-dom';
+import TotalOrdersBarChart from '../Components/TotalOrdersBarChart';
 
 const AdminDashboard = () => {
     const [TotalSalesData, setTotalSalesData] = useState([
@@ -42,11 +43,50 @@ const AdminDashboard = () => {
             ],
         },
     ]);
+
+
+    const [TotalOrdersData, setTotalOrdersData] = useState([
+        {
+            id: 'A',
+            value: 6,
+            max: 10,
+        },
+        {
+            id: 'B',
+            value: 9,
+            max: 10,
+        },
+        {
+            id: 'C',
+            value: 7,
+            max: 10,
+        },
+        {
+            id: 'D',
+            value: 5,
+            max: 10,
+        },
+        {
+            id: 'E',
+            value: 4,
+            max: 10,
+        },
+        {
+            id: 'F',
+            value: 6,
+            max: 10,
+        },
+        {
+            id: 'G',
+            value: 6,
+            max: 10,
+        },
+    ])
     return (
-        <div>
+        <div > 
             {/* Graph section */}
-            <div className='flex flex-col md:flex-row' style={{ backgroundColor: color.bg2 }}>
-                <div className='p-2 sm:p-3 md:p-5 lg:p-6 w-[50%]'>
+            <div className='flex flex-col 2xl:flex-row' style={{ backgroundColor: color.bg2 }}>
+                <div className='p-2 sm:p-3 md:p-5 lg:p-6 w-full 2xl:w-[50%]'>
                     <h1 className='text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold' >Ecommerce Dashboard</h1>
                     <p className='text-gray-700' >Here's what's going on your business right now</p>
                     <div className='mt-3 sm:mt-5 md:mt-7 lg:mt-9 flex gap-8 flex-col md:flex-row  '>
@@ -89,7 +129,51 @@ const AdminDashboard = () => {
                     </div>
 
                 </div>
-                <div>h</div>
+
+                <div className='grow p-2 sm:p-3 md:p-5 lg:p-6'>
+                    <div className='flex'>
+                        <div className='bg-white w-[100%] p-3 rounded-xl border border-gray-400'>
+                            <div className='flex w-full justify-between'>
+                                <span className='text-[15px] font-bold'>Total Orders</span>
+                                <span className='text-[18px] font-bold' >1,232,445</span>
+                            </div>
+                            <div className='text-[13px] font-medium text-gray-600'>Last 7 day</div>
+                            <div className='h-[500px]'>
+                                <TotalOrdersBarChart data={TotalOrdersData} />
+                            </div>
+                            <div className='flex w-full justify-between'>
+                                <span className='flex items-center gap-x-1'>
+                                    <span className='w-[15px] h-[10px] rounded' style={{ backgroundColor: color.Blue }}></span>
+                                    <span className='text-[14px]'>Completed</span>
+                                </span>
+                                <span className='text-[14px]'>54%</span>
+                            </div>
+                            <div className='flex w-full justify-between'>
+                                <span className='flex items-center gap-x-1'>
+                                    <span className='w-[15px] h-[10px] rounded bg-[#93c5fd]' ></span>
+                                    <span className='text-[14px]'>Total Orders</span>
+                                </span>
+                                <span className='text-[14px]'>54%</span>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div className='lg:mt-6 md:mt-5 sm:mt-3 mt-2 flex justify-between'>
+                        <div className='bg-white w-[33%] p-3 rounded-xl border border-gray-400'>
+                            <div className='font-bold text-xl'>Total Sales :    </div>
+                            <div className='text-center font-bold text-2xl text-blue-600'>$14140</div>
+                        </div>
+                        <div className='bg-white w-[33%] p-3 rounded-xl border border-gray-400'>
+                            <div className='font-bold text-xl'>Total Profit :    </div>
+                            <div className='text-center font-bold text-2xl text-blue-600'>$14140</div>
+                        </div>
+                        <div className='bg-white w-[33%] p-3 rounded-xl border border-gray-400'>
+                            <div className='font-bold text-xl'>Total Orders :    </div>
+                            <div className='text-center font-bold text-2xl text-blue-600'>140</div>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
     )
