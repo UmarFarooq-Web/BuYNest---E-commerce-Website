@@ -201,7 +201,7 @@ const AdminProducts = () => {
     const formatTimestamp = (timestamp) => {
         const date = new Date(timestamp);
         // const date = Date.now()
-        return new Intl.DateTimeFormat('en-US', {
+        return new Intl.DateTimeFormat('en-US' , {
             month: 'short',    // "Nov"
             day: 'numeric',    // "5"
             hour: 'numeric',   // "3"
