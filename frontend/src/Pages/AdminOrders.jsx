@@ -262,7 +262,7 @@ const AdminProducts = () => {
 
     }
 
-    const [Categorys, setCategorys] = useState(["Plants", "Toys"])
+    const [Categorys, setCategorys] = useState(["Plants" ,"Toys"])
     return (
         <div >
             <div className='p-2 sm:p-3 md:p-5 lg:p-6' style={{ backgroundColor: color.bg2 }}>
