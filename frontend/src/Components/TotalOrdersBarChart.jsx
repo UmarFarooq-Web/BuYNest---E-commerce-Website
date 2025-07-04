@@ -22,11 +22,11 @@ const TotalOrdersBarChart = ({ data }) => {
 
             axisBottom={null}      // Remove bottom X-axis
             axisLeft={null}
-            // borderRadius={4}       // Round the corners of the bars slightly
+        // borderRadius={4}       // Round the corners of the bars slightly
 
-            
 
-            // labelSkipHeight={999}
+
+        // labelSkipHeight={999}
         />
     )
 }

@@ -8,6 +8,7 @@ import ShippingPage from './Pages/ShippingPage'
 import HomeLayout from './Pages/HomeLayout'
 import AdminDashboard from './Pages/AdminDashboard'
 import AdminAddProduct from './Pages/AdminAddProduct'
+import AdminProducts from './Pages/AdminProducts'
 
 
 function App() {
@@ -19,6 +20,7 @@ function App() {
           <Route  path='/' element={<HomeLayout/>}>
             <Route index element={<AdminDashboard/>} />
             <Route path='/add-product' element={<AdminAddProduct/>} />
+            <Route path='/products' element={<AdminProducts/>} />
           </Route>
         </Routes>
       </BrowserRouter>

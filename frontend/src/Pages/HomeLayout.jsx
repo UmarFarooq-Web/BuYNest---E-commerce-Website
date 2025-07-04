@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import color from '../colors'
 import logo from '/logo.jpg'
-import { Search, ShoppingCart, User, Menu, Home } from 'lucide-react'
+import { Search, ShoppingCart, User, Menu, Home , PackageSearch } from 'lucide-react'
 import { Outlet, useSearchParams } from 'react-router-dom'
 import { NavLink } from 'react-router-dom'
 
@@ -12,6 +12,7 @@ const HomeLayout = () => {
     const navLink = [
         { name: "Dashboard", path: "/", Icon: Home },
         { name: "Add Product", path: "/add-product", Icon: User },
+        { name : "Products" , path: "/products" , Icon:PackageSearch}
     ]
     return (
         <div className='relative h-screen '>
@@ -52,7 +53,7 @@ const HomeLayout = () => {
 
 
                 {/* outlet */}
-                <div className='bg-green-500 overflow-y-auto h-full w-full relative z-[1]' >
+                <div className='overflow-y-auto h-full w-full relative z-[1]'  style={{backgroundColor:color.bg1}}>
                     <Outlet/>
                 </div>
             </div>
