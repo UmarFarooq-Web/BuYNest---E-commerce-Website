@@ -1,8 +1,8 @@
-import React from 'react'
-import Navbar from '../Components/Navbar'
-import SubNavbar from '../Components/SubNavbar'
-import color from "../colors"
-import logo from "/logo.jpg"
+import React from 'react';
+import Navbar from '../Components/Navbar';
+import SubNavbar from '../Components/SubNavbar';
+import color from "../colors";
+import logo from "/logo.jpg";
 
 const CheckoutPage = () => {
     return (
