@@ -10,6 +10,7 @@ import AdminDashboard from './Pages/AdminDashboard'
 import AdminAddProduct from './Pages/AdminAddProduct'
 import AdminProducts from './Pages/AdminProducts'
 import AdminOrders from './Pages/AdminOrders'
+import AdminOrder from './Pages/AdminOrder'
 
 
 function App() {
@@ -22,7 +23,8 @@ function App() {
             <Route index element={<AdminDashboard/>} />
             <Route path='/add-product' element={<AdminAddProduct/>} />
             <Route path='/products' element={<AdminProducts/>} />
-            <Route path='/orders'  element={<AdminOrders/>}  />
+            <Route path='/orders'  element={<AdminOrders/>} />
+            <Route path='/order'  element={<AdminOrder/>} />
           </Route>
         </Routes>
       </BrowserRouter>

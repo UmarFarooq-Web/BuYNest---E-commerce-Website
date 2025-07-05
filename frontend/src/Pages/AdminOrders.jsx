@@ -298,7 +298,6 @@ const AdminProducts = () => {
                 </div> */}
 
                 <div className='w-full  overflow-x-auto  p-1'>
-
                     <div className='min-w-[1200px]'>
                         <div className='flex justify-between font-bold text-[18px] border-t border-b border-gray-300 py-1'>
                             <div className='w-[11%]'>Order</div>
