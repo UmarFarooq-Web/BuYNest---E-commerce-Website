@@ -1,6 +1,7 @@
 import React from 'react'
 import color from '../colors'
 import textpic2 from '/testpic2.jpeg'
+import { Mail, MapPin, Phone, PhoneIcon, User } from 'lucide-react'
 const AdminOrder = () => {
     return (
         <div>
@@ -67,20 +68,53 @@ const AdminOrder = () => {
                                 <option value="Canceled"> Canceled</option>
                             </select>
                             <button className='w-full mt-6 rounded text-white py-2 cursor-pointer bg-blue-500 hover:bg-blue-700'>Update</button>
-
-
                         </div>
                     </div>
 
                 </div>
 
-                <div>
-                    
+                <div style={{ backgroundColor: color.bg1 }} className=' w-full rounded-xl border border-gray-300 shadow-xl mt-3 py-6 px-4'>
+                    <h1 className='text-xl md:text-3xl lg:text-3xl font-bold' >Details</h1>
+                    <div className='mt-4 flex gap-10'>
+                        <div className='flex items-start'>
+                            <User size={20}/>
+                            <div >
+                                <h1 className= ' text-[18px] font-[700]' >Customer Name</h1>
+                                <p className='text-blue-600  text-[18px]' >Umar Farooq</p>
+                            </div>
+                        </div>
+                        <div className='flex items-start'>
+                            <Mail size={20}/>
+                            <div >
+                                <h1 className= ' text-[18px] font-[700]' >Email</h1>
+                                <p className='text-blue-600  text-[18px]' >UmarFarooq@gmail.com</p>
+                            </div>
+                        </div>
+                        <div className='flex items-start'>
+                            <PhoneIcon size={20}/>
+                            <div >
+                                <h1 className= ' text-[18px] font-[700]' >Phone</h1>
+                                <p className='text-blue-600  text-[18px]' >03227204787</p>
+                            </div>
+                        </div>
+                    </div>
+                        <div className='flex items-start'>
+                            <MapPin  size={20} />
+                            <div >
+                                <h1 className= ' text-[18px] font-[700]' >Address</h1>
+                                <p className='text-blue-600  text-[18px]' >
+                                    <div className='flex gap-2' ><h3 className='text-black font-[500]' >State :</h3><span>Punjab</span></div>
+                                    <div className='flex gap-2' ><h3 className='text-black font-[500]' >City :</h3><span>Sheikhupura</span></div>
+                                    <div className='flex gap-2' ><h3 className='text-black font-[500]' >Zip Code :</h3><span>39350</span></div>
+                                    <div className='flex gap-2' ><h3 className='text-black font-[500]' >Address : </h3><span>Jandialah Road Mohallah Qadirabad Sheikhupura</span></div>
+                                </p>
+                            </div>
+                        </div>                       
                 </div>
 
             </div>
         </div>
     )
-}
+} 
 
 export default AdminOrder
