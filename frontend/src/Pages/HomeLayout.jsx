@@ -10,10 +10,10 @@ const HomeLayout = () => {
     const [isVisible, setIsVisible] = useState(false);
 
     const navLink = [
-        { name: "Dashboard", path: "/", Icon: Home },
-        { name: "Add Product", path: "/add-product", Icon: User },
-        { name: "Products", path: "/products", Icon: PackageSearch },
-        { name: "Orders", path: '/orders', Icon: Boxes }
+        { name: "Dashboard", path: "/admin", Icon: Home },
+        { name: "Add Product", path: "/admin/add-product", Icon: User },
+        { name: "Products", path: "/admin/products", Icon: PackageSearch },
+        { name: "Orders", path: '/admin/orders', Icon: Boxes }
 
     ]
     return (
