@@ -10,7 +10,7 @@ import Link from '@tiptap/extension-link'
 
 
 
-const Editor = () => {
+const Editor = ({setDescriptionJson}) => {
     const [IsLinkBoxShown, setIsLinkBoxShown] = useState(false);
     const [LinkData, setLinkData] = useState({
         href: "",
@@ -37,6 +37,11 @@ const Editor = () => {
     const editor = useEditor({
         extensions,
         content,
+        onUpdate({editor}){
+            const json = editor.getJSON();
+            setDescriptionJson(json)
+            console.log(json);
+        }
 
     })
 

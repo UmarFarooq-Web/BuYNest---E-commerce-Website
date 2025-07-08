@@ -5,9 +5,9 @@ import App from './App.jsx'
 import { StepPorvider } from './StepProvider.jsx'
 
 createRoot(document.getElementById('root')).render(
-  // <StrictMode>
-  <StepPorvider>
-    <App />
-  </StepPorvider>
-  ///* </StrictMode> */}
+  <StrictMode>
+    <StepPorvider>
+      <App />
+    </StepPorvider>
+  </StrictMode>
 )

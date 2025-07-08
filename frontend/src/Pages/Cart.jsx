@@ -4,10 +4,15 @@ import SubNavbar from '../Components/SubNavbar'
 import color from "../colors.js"
 import logo from '/logo.jpg'
 import { Trash2 } from 'lucide-react'
+import { useStep } from '../StepProvider.jsx'
+import { useNavigate } from 'react-router-dom'
+import  useStore  from '../store/useStore.js'
 
 const Cart = () => {
     const [Quantity, setQuantity] = useState(1)
-
+    const {setStep} = useStep();
+    const navigate = useNavigate()
+    const {cartProducts  , addToCart , removerFromCart} = useStore();
 
     const handleIncrement = () => {
         setQuantity(Quantity + 1)
@@ -17,6 +22,11 @@ const Cart = () => {
         if (Quantity > 1) {
             setQuantity(Quantity - 1)
         }
+    }
+
+    const handleCheckout = () =>{
+        setStep(2);
+        navigate("/shipping")
     }
 
     return (
@@ -166,7 +176,7 @@ const Cart = () => {
                                 <span>$50</span>
                             </div>
 
-                            <button className='w-full mt-6 rounded text-white py-2 cursor-pointer bg-blue-500 hover:bg-blue-700'>Proceed to Checkout</button>
+                            <button onClick={handleCheckout}  className='w-full mt-6 rounded text-white py-2 cursor-pointer bg-blue-500 hover:bg-blue-700'>Proceed to Checkout</button>
 
                         </div>
                     </div>

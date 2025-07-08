@@ -24,7 +24,7 @@ app.use(express.json());
 
 
 
-app.get("/" , (req , res)=>{
+app.get("/admin" , (req , res)=>{
     res.send("hello world")
 })
 

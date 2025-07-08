@@ -1,6 +1,7 @@
 import React from 'react'
 import color from '../colors'
 import { Menu } from 'lucide-react'
+import { Link } from 'react-router-dom'
 
 
 
@@ -10,10 +11,8 @@ const SubNavbar = () => {
         <div className='w-[100%] max-w-[1200px] flex justify-between'>
             <button className='flex gap-0.5 items-center cursor-pointer'><Menu  size={16}/><span className='text-[13px]'>Category</span></button>
             <div className='text-[13px] text-gray-600 flex  gap-6'>
-                <a className='hover:text-black cursor-pointer transition duration-300'>Home</a>
-                <a className='hover:text-black cursor-pointer transition duration-300'>Products</a>
-                <a className='hover:text-black cursor-pointer transition duration-300'>Shipping Info</a>
-                <a className='hover:text-black cursor-pointer transition duration-300'>Checkout</a>
+                <Link to={'/'} className='hover:text-black cursor-pointer transition duration-300'>Home</Link>
+                <Link to={'/products'}  className='hover:text-black cursor-pointer transition duration-300'>Products</Link>
             </div>
         </div>
     </div>

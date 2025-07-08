@@ -3,7 +3,7 @@ import logo from "../../public/logo.jpg"
 import { Search , ShoppingCart , User } from 'lucide-react'
 import color from '../colors'
 import { useRef } from 'react'
-import { useState } from 'react'
+import { useState , useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 const Navbar = () => {
     const [IsFocused , setIsFocused] = useState(false);
@@ -18,21 +18,24 @@ const Navbar = () => {
         if(SearchText.trim == '') return
         navigate(`/products?searchtext=${SearchText}`)
     }
+
+
+    
   return (
     <div className={` flex justify-center py-2 px-3`} style={{backgroundColor:color.bg2}}>
         <div className='w-[100%] max-w-[1200px] flex justify-between'>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 cursor-pointer " onClick={()=>navigate('/')} >
                 <img className='w-[30px]' src={logo} alt="" />
                 <span className='font-bold text-gray-500 w-[100px]'>Buy Nest</span>
             </div>
             <div style={IsFocused?{backgroundColor:color.bg1 , border:`1px solid ${color.Blue}`}:{backgroundColor:color.bg1}} className={` bg-[${color.bg1}] w-[100%] max-w-[700px] border border-gray-300 flex  items-center px-3 py-1 gap-2 rounded-4xl`}>
-                <input onFocus={()=>setIsFocused(true)} value={SearchText} onChange={handleChange} onBlur={()=>setIsFocused(false)} className='outline-none w-full' type="text" placeholder='Search' />
+                <input onFocus={()=>setIsFocused(true)} onKeyDown={(e)=>{ if(e.key === 'Enter'){handleSearch()} }} value={SearchText} onChange={handleChange} onBlur={()=>setIsFocused(false)} className='outline-none w-full' type="text" placeholder='Search' />
                 <button className='cursor-pointer' onClick={handleSearch} >
                     <Search size={15} color='gray' />
                 </button>
             </div>
             <div className='flex gap-3 cursor-pointer'>
-                <button className='cursor-pointer'><ShoppingCart /></button>
+                <button className='cursor-pointer' onClick={()=>navigate('/cart')} ><ShoppingCart /></button>
                 <button className='cursor-pointer'><User /></button>
             </div>
         </div>

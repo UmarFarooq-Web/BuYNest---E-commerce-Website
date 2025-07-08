@@ -4,12 +4,18 @@ import SubNavbar from '../Components/SubNavbar'
 import color from "../colors"
 import logo from "/logo.jpg"
 import { Country, State, City } from 'country-state-city';
+import { useStep } from '../StepProvider'
+import { useNavigate } from 'react-router-dom'
 
 const CheckoutPage = () => {
     const [States, setStates] = useState([])
     const [Cities, setCities] = useState([])
 
     const [SelectedState, setSelectedState] = useState('')
+
+    const {setStep} = useStep()
+
+    const navigate =  useNavigate();
 
     useEffect(() => {
         const s = State.getStatesOfCountry('PK')
@@ -28,6 +34,10 @@ const CheckoutPage = () => {
     const HandStateChange = (e) => {
         setSelectedState(e.target.value)
         console.log(e.target.value);
+    }
+    const handleCheckout = () => {
+        setStep(3);
+        navigate("/checkout")
     }
 
 
@@ -104,7 +114,7 @@ const CheckoutPage = () => {
 
                                 <div className='flex gap-3 mt-5 w-full flex-col md:flex-row'>
                                     <div className='w-1/3'>
-                                        <button className='w-full mt-6 rounded text-white py-2 cursor-pointer bg-blue-500 hover:bg-blue-700'>Proceed to Checkout</button>
+                                        <button onClick={handleCheckout} className='w-full mt-6 rounded text-white py-2 cursor-pointer bg-blue-500 hover:bg-blue-700'>Proceed to Checkout</button>
 
                                     </div>
                                 </div>

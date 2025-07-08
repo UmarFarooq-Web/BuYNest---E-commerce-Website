@@ -13,7 +13,8 @@ import AdminOrders from './Pages/AdminOrders'
 import AdminOrder from './Pages/AdminOrder'
 import ProtectedStep from './ProtectedStep'
 import Cart from './Pages/Cart'
-import CheckoutPage from './Pages/ShippingPage'
+import CheckoutPage from './Pages/CheckoutPage'
+import { Toaster } from 'react-hot-toast'
 
 
 
@@ -33,7 +34,7 @@ function App() {
           </Route>
           <Route path='/' element={<HomePage />} />
           <Route path='/product/:productId' element={<ProductPage />} />
-          <Route path='/products/:SearchText' element={<FilterProductSection/>} />
+          <Route path='/products' element={<FilterProductSection/>} />
 
           <Route path='/cart' element={<Cart/>} />
           <Route path='/shipping' element={<ProtectedStep requiredStep={2} ><ShippingPage/></ProtectedStep>} />
@@ -42,6 +43,7 @@ function App() {
 
         </Routes>
       </BrowserRouter>
+      <Toaster/>
     </>
   )
 }

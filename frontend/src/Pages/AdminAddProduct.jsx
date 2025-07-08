@@ -2,14 +2,36 @@ import React, { useState } from 'react'
 import color from '../colors'
 import Editor from '../Components/Editor';
 import logo from '/logo.jpg'
-import { X } from 'lucide-react';
+import { HandCoins, X } from 'lucide-react';
+import toast from 'react-hot-toast'
 
 const AdminAddProduct = () => {
   const [value, setValue] = useState('');
-
   const [Images, setImages] = useState([]);
+  const [DescriptionJson, setDescriptionJson] = useState(null)
+  const [data, setData] = useState({
+    Title: '',
+    RegularPrice: 0,
+    SalePrice: 0,
+    Quantity: 0,
+    Category: "",
+    SubCategory: "",
+    Brand: "",
+
+  })
 
 
+  const [Variants, setVariants] = useState([
+    { Option: "Size", value: "" },
+    { Option: "Size", value: "" },
+    { Option: "Size", value: "" }
+  ])
+
+  const handleVariantChange = (index, key, value) => {
+    setVariants(pre => pre.map((e, i) => {
+      return i === index ? { ...e, [key]: value } : e
+    }))
+  }
 
   const handleDrop = (e) => {
     e.preventDefault();
@@ -26,17 +48,55 @@ const AdminAddProduct = () => {
 
     console.log(ImageURLS);
     setImages([...Images, ...ImageURLS])
+  }
+
+
+
+
+  const handleChange = (e) => {
+    const name = e.target.name;
+    setData({ ...data, [name]: e.target.value })
+  }
+
+  const handleSubmit = (status) => {
+    e.preventDefault();
+
+    if(data.Title === '') return toast.error("Title is required");
+    if (data.RegularPrice === '' || data.RegularPrice <= 0) return toast.error("Regular Price is required and must be greater than 0");
+    if (data.SalePrice === '' || data.SalePrice <= 0) return toast.error("Sale Price is required and must be greater than 0");
+    if (data.Quantity === '' || data.Quantity <= 0) return toast.error("Quantity is required and must be greater than 0");
+    if (data.Category === '') return toast.error("Category is required");
+    if (data.SubCategory === '') return toast.error("Subcategory is required");
+    if (data.Brand === '') return toast.error("Brand is required");
+    if (!DescriptionJson || !DescriptionJson.content || DescriptionJson.content.length === 0) return toast.error("Description is required");
+
+
+    const formData = new FormData();
+    formData.append('Title', data.Title)
+    formData.append('Status', status)
+    formData.append('RegularPrice', data.RegularPrice)
+    formData.append('SalePrice', data.SalePrice)
+    formData.append('Quandtity', data.Quantity)
+    formData.append('Category', data.Category)
+    formData.append('SubCategory', data.SubCategory)
+    formData.append('Brand', data.Brand)
+    formData.append('Variants', JSON.stringify(Variants))
+    formData.append('Description', JSON.stringify(DescriptionJson))
 
   }
+
+
+
+
   return (
     <div className='min-h-screen p-2 sm:p-3 md:p-5 lg:p-6' style={{ backgroundColor: color.bg2 }}>
 
       <div className='flex justify-between  flex-col sm:flex-row gap-2'>
         <h1 className='text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold' >Add Product</h1>
         <div className=' flex gap-1'>
-          <button className='rounded  text-gray-600 py-2 px-4 text-[12px] font-bold border-gray-300 border cursor-pointer'>Save Draft</button>
+          <button className='rounded  text-gray-600 py-2 px-4 text-[12px] font-bold border-gray-300 border cursor-pointer'>Discard</button>
           <button className='rounded text-blue-500 py-2 px-4 text-[12px] font-bold border-gray-300 border cursor-pointer'>Save Draft</button>
-          <button className=' rounded text-white py-2 px-4 text-[12px]  font-bold cursor-pointer bg-blue-500 hover:bg-blue-700'>Publish Product</button>
+          <button onClick={() => handleSubmit('Publish')} className=' rounded text-white py-2 px-4 text-[12px]  font-bold cursor-pointer bg-blue-500 hover:bg-blue-700'>Publish Product</button>
         </div>
 
       </div>
@@ -46,13 +106,12 @@ const AdminAddProduct = () => {
 
           <div>
             <h2 className='text-lg md:text-xl font-medium mb-3' >Product Title</h2>
-            <input type="text" style={{ backgroundColor: color.bg1 }} className=' border p-2 text-[13px] text-gray-500 rounded w-full border-gray-300 focus:border-blue-500  outline-0 outline-blue-500/20 outline-offset-0 focus:outline-4 transition-all duration-100' placeholder='Enter Product Title Here' />
+            <input type="text" style={{ backgroundColor: color.bg1 }} onChange={handleChange} value={data.Title} name='Title' className=' border p-2 text-[13px] text-gray-500 rounded w-full border-gray-300 focus:border-blue-500  outline-0 outline-blue-500/20 outline-offset-0 focus:outline-4 transition-all duration-100' placeholder='Enter Product Title Here' />
           </div>
 
           <div>
             <h2 className='text-lg md:text-xl font-medium mb-3' >Product Description</h2>
-
-            <Editor />
+            <Editor setDescriptionJson={setDescriptionJson} />
           </div>
 
           <div className='w-full '>
@@ -71,15 +130,15 @@ const AdminAddProduct = () => {
             <h1 className='font-bold text-xl' >Inventory</h1>
             <div className='mt-3'>
               <div className='text-gray-600' > Regular Price</div>
-              <input type="text" style={{ backgroundColor: color.bg1 }} className=' border py-2 px-2 text-gray-500 rounded w-full border-gray-300 focus:border-blue-500  outline-0 outline-blue-500/20 outline-offset-0 focus:outline-4 transition-all mt-1' placeholder='Enter Regular Price' />
+              <input type="text" style={{ backgroundColor: color.bg1 }} onChange={handleChange} value={data.RegularPrice} name='RegularPrice' className=' border py-2 px-2 text-gray-500 rounded w-full border-gray-300 focus:border-blue-500  outline-0 outline-blue-500/20 outline-offset-0 focus:outline-4 transition-all mt-1' placeholder='Enter Regular Price' />
             </div>
             <div className='mt-3'>
               <div className='text-gray-600' > Sale Price</div>
-              <input type="text" style={{ backgroundColor: color.bg1 }} className=' border py-2 px-2 text-gray-500 rounded w-full border-gray-300 focus:border-blue-500  outline-0 outline-blue-500/20 outline-offset-0 focus:outline-4 transition-all mt-1' placeholder='Enter Sale Price ' />
+              <input type="text" style={{ backgroundColor: color.bg1 }} onChange={handleChange} value={data.SalePrice} name='SalePrice' className=' border py-2 px-2 text-gray-500 rounded w-full border-gray-300 focus:border-blue-500  outline-0 outline-blue-500/20 outline-offset-0 focus:outline-4 transition-all mt-1' placeholder='Enter Sale Price ' />
             </div>
             <div className='mt-3'>
               <div className='text-gray-600' > Quantity</div>
-              <input type="text" style={{ backgroundColor: color.bg1 }} className=' border py-2 px-2 text-gray-500 rounded w-full border-gray-300 focus:border-blue-500  outline-0 outline-blue-500/20 outline-offset-0 focus:outline-4 transition-all mt-1' placeholder='Enter Quantity' />
+              <input type="text" style={{ backgroundColor: color.bg1 }} onChange={handleChange} value={data.Quantity} name='Quantity' className=' border py-2 px-2 text-gray-500 rounded w-full border-gray-300 focus:border-blue-500  outline-0 outline-blue-500/20 outline-offset-0 focus:outline-4 transition-all mt-1' placeholder='Enter Quantity' />
             </div>
           </div>
 
@@ -94,16 +153,16 @@ const AdminAddProduct = () => {
 
             <div className='mt-3'>
               <div className='text-gray-600' > Category</div>
-              <input type="text" style={{ backgroundColor: color.bg1 }} className=' border py-2 px-2 text-gray-500 rounded w-full border-gray-300 focus:border-blue-500  outline-0 outline-blue-500/20 outline-offset-0 focus:outline-4 transition-all mt-1' placeholder='Enter your Category ' />
+              <input type="text" style={{ backgroundColor: color.bg1 }} onChange={handleChange} value={data.Category} name='Category' className=' border py-2 px-2 text-gray-500 rounded w-full border-gray-300 focus:border-blue-500  outline-0 outline-blue-500/20 outline-offset-0 focus:outline-4 transition-all mt-1' placeholder='Enter your Category ' />
             </div>
 
             <div className='mt-3'>
               <div className='text-gray-600' > Sub Category</div>
-              <input type="text" style={{ backgroundColor: color.bg1 }} className=' border py-2 px-2 text-gray-500 rounded w-full border-gray-300 focus:border-blue-500  outline-0 outline-blue-500/20 outline-offset-0 focus:outline-4 transition-all mt-1' placeholder='Enter your Sub Category ' />
+              <input type="text" style={{ backgroundColor: color.bg1 }} onChange={handleChange} value={data.SubCategory} name='SubCategory' className=' border py-2 px-2 text-gray-500 rounded w-full border-gray-300 focus:border-blue-500  outline-0 outline-blue-500/20 outline-offset-0 focus:outline-4 transition-all mt-1' placeholder='Enter your Sub Category ' />
             </div>
             <div className='mt-3'>
               <div className='text-gray-600' > Brand</div>
-              <input type="text" style={{ backgroundColor: color.bg1 }} className=' border py-2 px-2 text-gray-500 rounded w-full border-gray-300 focus:border-blue-500  outline-0 outline-blue-500/20 outline-offset-0 focus:outline-4 transition-all mt-1' placeholder='Enter brand name ' />
+              <input type="text" style={{ backgroundColor: color.bg1 }} onChange={handleChange} value={data.Brand} name='Brand' className=' border py-2 px-2 text-gray-500 rounded w-full border-gray-300 focus:border-blue-500  outline-0 outline-blue-500/20 outline-offset-0 focus:outline-4 transition-all mt-1' placeholder='Enter brand name ' />
             </div>
           </div>
 
@@ -114,35 +173,35 @@ const AdminAddProduct = () => {
 
             <div className='mt-3'>
               <div className='text-gray-600' > Option 1</div>
-              <select style={{ backgroundColor: color.bg1 }} name="cardType" id="cardType" className=' mt-3 text-gray-500 border w-full border-gray-300 p-1 rounded focus:border-blue-500  outline-0 outline-blue-500/20 outline-offset-0 focus:outline-4 transition-all duration-100'>
-                <option value="SIze">Size</option>
+              <select style={{ backgroundColor: color.bg1 }} onChange={(e) => { handleVariantChange(0, 'Option', e.target.value) }} value={Variants[0].Option} name="cardType" id="cardType" className=' mt-3 text-gray-500 border w-full border-gray-300 p-1 rounded focus:border-blue-500  outline-0 outline-blue-500/20 outline-offset-0 focus:outline-4 transition-all duration-100'>
+                <option value="Size">Size</option>
                 <option value="Color">Color</option>
                 <option value="Weight"> Weigth</option>
                 <option value="Smell">Smell</option>
               </select>
-              <input type="text" style={{ backgroundColor: color.bg1 }} className=' mt-3 border py-2 px-2 text-gray-500 rounded w-full border-gray-300 focus:border-blue-500  outline-0 outline-blue-500/20 outline-offset-0 focus:outline-4 transition-all' placeholder='Enter your Value comma seperated ' />
+              <input type="text" style={{ backgroundColor: color.bg1 }} onChange={(e) => { handleVariantChange(0, 'value', e.target.value) }} value={Variants[0].value} className=' mt-3 border py-2 px-2 text-gray-500 rounded w-full border-gray-300 focus:border-blue-500  outline-0 outline-blue-500/20 outline-offset-0 focus:outline-4 transition-all' placeholder='Enter your Value comma seperated ' />
             </div>
 
             <div className='mt-3'>
               <div className='text-gray-600' > Option 2</div>
-              <select style={{ backgroundColor: color.bg1 }} name="cardType1" id="cardType1" className=' mt-3 text-gray-500 border w-full border-gray-300 p-1 rounded focus:border-blue-500  outline-0 outline-blue-500/20 outline-offset-0 focus:outline-4 transition-all duration-100'>
-                <option value="SIze">Size</option>
+              <select style={{ backgroundColor: color.bg1 }} onChange={(e) => { handleVariantChange(1, 'Option', e.target.value) }} value={Variants[1].Option} name="cardType1" id="cardType1" className=' mt-3 text-gray-500 border w-full border-gray-300 p-1 rounded focus:border-blue-500  outline-0 outline-blue-500/20 outline-offset-0 focus:outline-4 transition-all duration-100'>
+                <option value="Size">Size</option>
                 <option value="Color">Color</option>
                 <option value="Weight"> Weigth</option>
                 <option value="Smell">Smell</option>
               </select>
-              <input type="text" style={{ backgroundColor: color.bg1 }} className=' mt-3 border py-2 px-2 text-gray-500 rounded w-full border-gray-300 focus:border-blue-500  outline-0 outline-blue-500/20 outline-offset-0 focus:outline-4 transition-all' placeholder='Enter your Value comma seperated ' />
+              <input type="text" style={{ backgroundColor: color.bg1 }} onChange={(e) => { handleVariantChange(1, 'value', e.target.value) }} value={Variants[1].value} className=' mt-3 border py-2 px-2 text-gray-500 rounded w-full border-gray-300 focus:border-blue-500  outline-0 outline-blue-500/20 outline-offset-0 focus:outline-4 transition-all' placeholder='Enter your Value comma seperated ' />
             </div>
 
             <div className='mt-3'>
               <div className='text-gray-600' > Option 3</div>
-              <select style={{ backgroundColor: color.bg1 }} name="cardType2" id="cardType2" className=' mt-3 text-gray-500 border w-full border-gray-300 p-1 rounded focus:border-blue-500  outline-0 outline-blue-500/20 outline-offset-0 focus:outline-4 transition-all duration-100'>
-                <option value="SIze">Size</option>
+              <select style={{ backgroundColor: color.bg1 }} onChange={(e) => { handleVariantChange(2, 'Option', e.target.value) }} value={Variants[2].Option} name="cardType2" id="cardType2" className=' mt-3 text-gray-500 border w-full border-gray-300 p-1 rounded focus:border-blue-500  outline-0 outline-blue-500/20 outline-offset-0 focus:outline-4 transition-all duration-100'>
+                <option value="Size">Size</option>
                 <option value="Color">Color</option>
                 <option value="Weight"> Weigth</option>
                 <option value="Smell">Smell</option>
               </select>
-              <input type="text" style={{ backgroundColor: color.bg1 }} className=' mt-3 border py-2 px-2 text-gray-500 rounded w-full border-gray-300 focus:border-blue-500  outline-0 outline-blue-500/20 outline-offset-0 focus:outline-4 transition-all' placeholder='Enter your Value comma seperated ' />
+              <input type="text" style={{ backgroundColor: color.bg1 }} onChange={(e) => { handleVariantChange(2, 'value', e.target.value) }} value={Variants[2].value} className=' mt-3 border py-2 px-2 text-gray-500 rounded w-full border-gray-300 focus:border-blue-500  outline-0 outline-blue-500/20 outline-offset-0 focus:outline-4 transition-all' placeholder='Enter your Value comma seperated ' />
             </div>
           </div>
 

@@ -7,17 +7,17 @@ const VariantSchema = new mongoose.Schema({
 
 
 const ProductSchema = new mongoose.Schema({
-    ProductId:String,
+    ProductId:String,   
     Title:String,
-    Description:String,
-    IsActive:Boolean,
-    Images:[ {type:String}],
+    Status:Boolean,
     RegularPrice:Number,
     SalePrice:Number,
     Quantity:Number,
     Category:String,
     SubCategory:String,
     Brand:String,
+    Description:String,
+    Images:[ {type:String}],
     Variants:[VariantSchema]
 })
 
