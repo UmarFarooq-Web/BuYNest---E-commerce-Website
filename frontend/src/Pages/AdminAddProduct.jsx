@@ -2,13 +2,16 @@ import React, { useState } from 'react'
 import color from '../colors'
 import Editor from '../Components/Editor';
 import logo from '/logo.jpg'
-import { HandCoins, X } from 'lucide-react';
+import { HandCoins, X , Loader } from 'lucide-react';
 import toast from 'react-hot-toast'
+import AdminInstance from '../axios/adminInstanse';
 
 const AdminAddProduct = () => {
   const [value, setValue] = useState('');
   const [Images, setImages] = useState([]);
+  const [ImageFiles, setImageFiles] = useState([])
   const [DescriptionJson, setDescriptionJson] = useState(null)
+  const [IsPublishing , setIsPublishing] = useState(false);
   const [data, setData] = useState({
     Title: '',
     RegularPrice: 0,
@@ -42,7 +45,7 @@ const AdminAddProduct = () => {
 
     const ImageFiles = filesArray.filter((e) => e.type.includes('image/'))
 
-    console.log(ImageFiles);
+    setImageFiles(prev => [...prev, ...ImageFiles])
 
     const ImageURLS = ImageFiles.map((e) => URL.createObjectURL(e));
 
@@ -58,17 +61,19 @@ const AdminAddProduct = () => {
     setData({ ...data, [name]: e.target.value })
   }
 
-  const handleSubmit = (status) => {
-    e.preventDefault();
+  const handleSubmit = async (status) => {
 
-    if(data.Title === '') return toast.error("Title is required");
+    setIsPublishing(true)
+
+    if (data.Title === '') return toast.error("Title is required");
+    if (!DescriptionJson || !DescriptionJson.content || DescriptionJson.content.length === 0) return toast.error("Description is required");
     if (data.RegularPrice === '' || data.RegularPrice <= 0) return toast.error("Regular Price is required and must be greater than 0");
     if (data.SalePrice === '' || data.SalePrice <= 0) return toast.error("Sale Price is required and must be greater than 0");
     if (data.Quantity === '' || data.Quantity <= 0) return toast.error("Quantity is required and must be greater than 0");
     if (data.Category === '') return toast.error("Category is required");
     if (data.SubCategory === '') return toast.error("Subcategory is required");
     if (data.Brand === '') return toast.error("Brand is required");
-    if (!DescriptionJson || !DescriptionJson.content || DescriptionJson.content.length === 0) return toast.error("Description is required");
+    if (ImageFiles.length <= 0) return toast.error("Atleast 1 Image is required");
 
 
     const formData = new FormData();
@@ -82,6 +87,26 @@ const AdminAddProduct = () => {
     formData.append('Brand', data.Brand)
     formData.append('Variants', JSON.stringify(Variants))
     formData.append('Description', JSON.stringify(DescriptionJson))
+    ImageFiles.forEach((file) => {
+      formData.append('images', file)
+    })
+
+    try {
+      const res = await AdminInstance.post('/add-product', formData, {
+        headers: {
+          "Content-Type": "multipart/form-data"
+        }
+      })
+
+      toast.success(res.data.message);
+
+      // Navigate('/admin/products')
+    } catch (error) {
+      toast.error(error?.response?.data?.message || "Interal server error")
+      console.log("Error in Handle submit function in addProductPage : ", error)
+    }
+
+    setIsPublishing(false)
 
   }
 
@@ -96,7 +121,7 @@ const AdminAddProduct = () => {
         <div className=' flex gap-1'>
           <button className='rounded  text-gray-600 py-2 px-4 text-[12px] font-bold border-gray-300 border cursor-pointer'>Discard</button>
           <button className='rounded text-blue-500 py-2 px-4 text-[12px] font-bold border-gray-300 border cursor-pointer'>Save Draft</button>
-          <button onClick={() => handleSubmit('Publish')} className=' rounded text-white py-2 px-4 text-[12px]  font-bold cursor-pointer bg-blue-500 hover:bg-blue-700'>Publish Product</button>
+          <button onClick={(e) => { e.preventDefault(); handleSubmit('Publish') }} className=' rounded text-white py-2 px-4 text-[12px]  font-bold cursor-pointer bg-blue-500 hover:bg-blue-700'>{IsPublishing?<Loader className='animate-spin' />  :"Publish Product"}</button>
         </div>
 
       </div>

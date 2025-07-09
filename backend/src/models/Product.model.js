@@ -1,25 +1,24 @@
 import mongoose from "mongoose"
 
-const VariantSchema = new mongoose.Schema({
-    Type:String,
-    Value:String,
-} , {_id:false})
 
 
 const ProductSchema = new mongoose.Schema({
     ProductId:String,   
     Title:String,
-    Status:Boolean,
+    Status:String,
     RegularPrice:Number,
     SalePrice:Number,
     Quantity:Number,
     Category:String,
     SubCategory:String,
     Brand:String,
-    Description:String,
+    Description:Object,
     Images:[ {type:String}],
-    Variants:[VariantSchema]
-})
+    Variants:[{
+        Option:String,
+        value:String
+    }]
+} , {timestamps:true})
 
 const Product = mongoose.model("Product" , ProductSchema)
 export default Product;
