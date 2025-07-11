@@ -14,6 +14,8 @@ import { useParams } from 'react-router-dom';
 import UserInstance from '../axios/userInstanse';
 import toast from 'react-hot-toast';
 import ProductDescription from '../Components/ProductDescription';
+import useStore from '../store/useStore';
+import { useNavigate } from 'react-router-dom';
 
 const ProductPage = () => {
     const [TranslateValue, setTranslateValue] = useState(0);
@@ -29,10 +31,38 @@ const ProductPage = () => {
         Review: ""
     })
 
+    const navigate = useNavigate();
+
 
 
     const [IsLoadingProductData, setIsLoadingProductData] = useState(true)
     const [ProductData, setProductData] = useState(null);
+
+
+
+    const { setCartProducts } = useStore()
+
+
+    const [selectedVariants, setSelectedVariants] = useState([]);
+
+    const handleVariantChange = (e, optionName) => {
+        const value = e.target.value;
+
+        setSelectedVariants(prev => {
+            const existing = prev.find(v => v.Option === optionName);
+
+            if (existing) {
+                return prev.map(v =>
+                    v.Option === optionName ? { ...v, value } : v
+                );
+            } else {
+                return [...prev, { Option: optionName, value }];
+            }
+        });
+
+        console.log(selectedVariants)
+    };
+
 
 
 
@@ -140,7 +170,70 @@ const ProductPage = () => {
 
     }
 
+    useEffect(() => {
 
+        const cart = JSON.parse(localStorage.getItem('cart')) || []
+
+        setCartProducts(cart)
+
+    }, [])
+
+
+    const areAllVariantsSelected = () => {
+        if (ProductData.Variants.length == 0) return true
+
+        return ProductData.Variants.every(v =>
+            selectedVariants.find(s => s.Option === v.Option && s.value !== "")
+        )
+    }
+
+
+    const handleAddToCart = () => {
+
+        if (!areAllVariantsSelected()) return toast.error("Please! Select Variants");
+
+        const cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+
+        const item = cart.find(e => e.ProductId === productId);
+
+        if (item) {
+            item.Quantity++
+        } else {
+            cart.push({ ProductId: productId, Quantity: 1, Variants: selectedVariants });
+        }
+
+        localStorage.setItem("cart", JSON.stringify(cart));
+        setCartProducts(cart)
+
+        toast.success("Added to Cart")
+
+
+    }
+
+    const handleBuyNow = () => {
+        if (!areAllVariantsSelected()) return toast.error("Please! Select Variants");
+
+        const cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+
+        const item = cart.find(e => e.ProductId === productId);
+
+        if (item) {
+            item.Quantity++
+        } else {
+            cart.push({ ProductId: productId, Quantity: 1, Variants: selectedVariants });
+        }
+
+        localStorage.setItem("cart", JSON.stringify(cart));
+        setCartProducts(cart)
+
+        toast.success("Added to Cart")
+
+        navigate('/cart')
+
+
+    }
 
 
 
@@ -152,7 +245,7 @@ const ProductPage = () => {
         <div className='relative'>
             <Navbar />
             <SubNavbar />
-            <div className='flex flex-col items-center pt-6 m-3  min-h-screen' style={{ backgroundColor: color.bg2 }}>
+            <div className='flex flex-col items-center pt-6 p-3  min-h-screen' style={{ backgroundColor: color.bg2 }}>
 
 
                 <div className='flex flex-col lg:flex-row justify-center items-center  lg:justify-start lg:items-start w-full max-w-[1200px] gap-4'>
@@ -190,12 +283,15 @@ const ProductPage = () => {
                         /> <span className='text-sm text-gray-500'>({ProductData.NumberOfRatings} People Rated) </span></div>
 
                         <h1 className='font-bold lg:text-2xl md:text-3xl'>{ProductData.Title}</h1>
-                        <p className='flex items-end lg:gap-4 md:gap-2 gap-1 lg:mt-5 md:mt-3.5 sm:mt-2 mt-1 '><span className='lg:text-4xl md:text-3xl text-2xl font-bold'>${ProductData.SalePrice}</span><span className='lg:text-3xl md:text-2xl text-xl text-gray-500 line-through'>${ProductData.RegularPrice}</span><span className='text-orange-400 lg:text-2xl md:text-xl font-bold'>{parseInt(100-((ProductData.SalePrice/ProductData.RegularPrice)*100))}% off</span></p>
+                        <p className='flex items-end lg:gap-4 md:gap-2 gap-1 lg:mt-5 md:mt-3.5 sm:mt-2 mt-1 '><span className='lg:text-4xl md:text-3xl text-2xl font-bold'>${ProductData.SalePrice}</span><span className='lg:text-3xl md:text-2xl text-xl text-gray-500 line-through'>${ProductData.RegularPrice}</span><span className='text-orange-400 lg:text-2xl md:text-xl font-bold'>{parseInt(100 - ((ProductData.SalePrice / ProductData.RegularPrice) * 100))}% off</span></p>
                         <span className='text-green-500 pt-7 lg:text-2xl md:text-xl'>{ProductData.Quantity > 0 ? "In Stock" : <span className='text-red-500'>Out of Stock</span>}</span>
                         <p><b>Do you want it on Saturday, July 29th?</b> Choose <b>Saturday Delivery</b> at checkout if you want your order delivered within 12 hours 43 minutes, Details. <b> Gift wrapping is available.</b> </p>
+
+
+
                         {ProductData?.Variants?.map((e) => (<div className='flex gap-3 border border-amber-500 p-2 rounded-xl' style={{ backgroundColor: color.bg1 }}>
                             <div className='text-amber-500 md:text-xl'>{e.Option}:</div>
-                            <select className='bg-amber-500 text-white rounded w-full' name="Variants" id="Variants">
+                            <select className='bg-amber-500 text-white rounded w-full' onChange={(event) => handleVariantChange(event, e.Option)} name={e.Option} id="Variants">
                                 <option value="">SELECT</option>
                                 {e?.value?.split(",")?.map((item) => (
                                     <option value={item} > {item}</option>
@@ -208,8 +304,8 @@ const ProductPage = () => {
 
                 <div className='flex flex-col lg:flex-row justify-center items-center  lg:justify-start lg:items-start w-full max-w-[1200px] gap-4 mt-2'>
                     <div className='w-[100%] lg:w-[600px] flex gap-2 mt-4 md:mt-0.5 lg:mt-0.5'>
-                        <button className='flex items-center justify-center py-3 w-[50%] border border-amber-500 rounded-4xl text-amber-500 hover:bg-amber-500 hover:text-white cursor-pointer transition duration-200'><ShoppingCart />Add to cart</button>
-                        <button className='flex items-center justify-center py-3 w-[50%] border border-amber-500 rounded-4xl text-white bg-amber-500 hover:bg-amber-600 transition duration-200 cursor-pointer'><ShoppingCart />Buy Now</button>
+                        <button onClick={handleAddToCart} className='flex items-center justify-center py-3 w-[50%] border border-amber-500 rounded-4xl text-amber-500 hover:bg-amber-500 hover:text-white cursor-pointer transition duration-200'><ShoppingCart />Add to cart</button>
+                        <button onClick={handleBuyNow} className='flex items-center justify-center py-3 w-[50%] border border-amber-500 rounded-4xl text-white bg-amber-500 hover:bg-amber-600 transition duration-200 cursor-pointer'><ShoppingCart />Buy Now</button>
 
                     </div>
                     <div className='flex gap-3'>

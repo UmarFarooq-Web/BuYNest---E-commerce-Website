@@ -5,9 +5,12 @@ import color from '../colors'
 import { useRef } from 'react'
 import { useState , useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
+import useStore from '../store/useStore.js'
 const Navbar = () => {
     const [IsFocused , setIsFocused] = useState(false);
     const [SearchText , setSearchText] = useState('')
+    const {cartProducts , setCartProducts} = useStore()
+    const [cartLength , setCartLength] = useState(0)
     const navigate = useNavigate();
 
     const handleChange = (e)=>{
@@ -18,6 +21,16 @@ const Navbar = () => {
         if(SearchText.trim == '') return
         navigate(`/products?searchtext=${SearchText}`)
     }
+
+
+    useEffect(() => {
+        const cart = JSON.parse(localStorage.getItem('cart')) || []
+
+        setCartLength(cart.length)
+
+      
+    }, [cartProducts])
+    
 
 
     
@@ -35,7 +48,7 @@ const Navbar = () => {
                 </button>
             </div>
             <div className='flex gap-3 cursor-pointer'>
-                <button className='cursor-pointer' onClick={()=>navigate('/cart')} ><ShoppingCart /></button>
+                <button className='cursor-pointer relative' onClick={()=>navigate('/cart')} ><ShoppingCart /> { cartLength > 0  && <div className='absolute -top-1 -right-3 px-2 rounded-full bg-green-400' >{cartLength}</div>} </button>
                 <button className='cursor-pointer'><User /></button>
             </div>
         </div>
