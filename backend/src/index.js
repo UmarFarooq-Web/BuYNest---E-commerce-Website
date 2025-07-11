@@ -6,6 +6,7 @@ import http from "http"
 import AdminRouter from "./routes/adminRoutes.js";
 import dotenv from 'dotenv'
 import connectDB from "./utils/databaseHelper.js";
+import userRoutes from "./routes/userRoutes.js";
 const app = express();
 const server = http.createServer(app);
 
@@ -29,6 +30,8 @@ app.use(express.json());
 
 
 app.use("/admin" , AdminRouter )
+
+app.use("/user" , userRoutes)
 
 
 

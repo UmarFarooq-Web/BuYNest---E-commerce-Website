@@ -81,7 +81,7 @@ const AdminAddProduct = () => {
     formData.append('Status', status)
     formData.append('RegularPrice', data.RegularPrice)
     formData.append('SalePrice', data.SalePrice)
-    formData.append('Quandtity', data.Quantity)
+    formData.append('Quantity', data.Quantity)
     formData.append('Category', data.Category)
     formData.append('SubCategory', data.SubCategory)
     formData.append('Brand', data.Brand)

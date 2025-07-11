@@ -2,10 +2,11 @@ import mongoose from "mongoose";
 
 const reviewSchema = new mongoose.Schema({
   ProductId: String,
-  CustomerId: String,
-  Rating: Number,
+  Name: String,
   Review: String,
+  Rating: Number,
   Status: { type: String, enum: ['Pending', 'Approved', 'Cancelled'], default: 'Pending' },
 } , {timestamps:true});
 
-module.exports = mongoose.model('Review', reviewSchema);
+const ReviewModel = mongoose.model('Review', reviewSchema);
+export default ReviewModel
