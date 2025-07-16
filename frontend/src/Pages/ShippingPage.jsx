@@ -108,7 +108,7 @@ const CheckoutPage = () => {
 
                                     <div className=''>
                                         <div className='font-medium'>Zip</div>
-                                        <input type="text" style={{ backgroundColor: color.bg1 }} className=' border p-1 text-gray-500 rounded w-full border-gray-300 focus:border-blue-500  outline-0 outline-blue-500/20 outline-offset-0 focus:outline-4 transition-all duration-100' placeholder='Enter CVC' />
+                                        <input type="text" style={{ backgroundColor: color.bg1 }} className=' border p-1 text-gray-500 rounded w-full border-gray-300 focus:border-blue-500  outline-0 outline-blue-500/20 outline-offset-0 focus:outline-4 transition-all duration-100' placeholder='Enter Zip code' />
                                     </div>
                                 </div>
 

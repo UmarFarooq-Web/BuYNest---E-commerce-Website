@@ -289,9 +289,9 @@ const ProductPage = () => {
 
 
 
-                        {ProductData?.Variants?.map((e) => (<div className='flex gap-3 border border-amber-500 p-2 rounded-xl' style={{ backgroundColor: color.bg1 }}>
-                            <div className='text-amber-500 md:text-xl'>{e.Option}:</div>
-                            <select className='bg-amber-500 text-white rounded w-full' onChange={(event) => handleVariantChange(event, e.Option)} name={e.Option} id="Variants">
+                        {ProductData?.Variants?.map((e) => (<div className='flex gap-3 border border-gray-200 p-2 rounded-xl' style={{ backgroundColor: color.bg1 }}>
+                            <div className='text-black md:text-xl'>{e.Option}:</div>
+                            <select className=' rounded w-full' onChange={(event) => handleVariantChange(event, e.Option)} name={e.Option} id="Variants">
                                 <option value="">SELECT</option>
                                 {e?.value?.split(",")?.map((item) => (
                                     <option value={item} > {item}</option>
@@ -304,8 +304,8 @@ const ProductPage = () => {
 
                 <div className='flex flex-col lg:flex-row justify-center items-center  lg:justify-start lg:items-start w-full max-w-[1200px] gap-4 mt-2'>
                     <div className='w-[100%] lg:w-[600px] flex gap-2 mt-4 md:mt-0.5 lg:mt-0.5'>
-                        <button onClick={handleAddToCart} className='flex items-center justify-center py-3 w-[50%] border border-amber-500 rounded-4xl text-amber-500 hover:bg-amber-500 hover:text-white cursor-pointer transition duration-200'><ShoppingCart />Add to cart</button>
-                        <button onClick={handleBuyNow} className='flex items-center justify-center py-3 w-[50%] border border-amber-500 rounded-4xl text-white bg-amber-500 hover:bg-amber-600 transition duration-200 cursor-pointer'><ShoppingCart />Buy Now</button>
+                        <button onClick={handleAddToCart} className='flex items-center justify-center py-3 w-[50%] border border-blue-500 rounded-4xl text-blue-500 hover:bg-blue-500 hover:text-white cursor-pointer transition duration-200'><ShoppingCart />Add to cart</button>
+                        <button onClick={handleBuyNow} className='flex items-center justify-center py-3 w-[50%] border border-blue-500 rounded-4xl text-white bg-blue-500 hover:bg-blue-600 transition duration-200 cursor-pointer'><ShoppingCart />Buy Now</button>
 
                     </div>
                     <div className='flex gap-3'>
@@ -323,7 +323,7 @@ const ProductPage = () => {
 
 
                     {!IsShowRating ?
-                        <div className=' rounded border border-gray-400 mt-5' style={{ backgroundColor: color.bg1 }}>
+                        <div className=' rounded mt-5'>
                             <ProductDescription content={ProductData.Description} />
                         </div>
 

@@ -15,6 +15,11 @@ const useStore = create((set)=>({
     })),
 
 
+    userData:null,
+
+    setUserData : (data) => set(()=>({userData:data}))
+
+
     
 
 }))
