@@ -13,21 +13,29 @@ const CheckoutPage = () => {
 
     const [SelectedState, setSelectedState] = useState('')
 
-    const {setStep} = useStep()
+    const { setStep } = useStep()
 
-    const navigate =  useNavigate();
+    const navigate = useNavigate();
+
+    const { Data, setData } = useState({
+        FullName: "sdsd",
+        Email: "",
+        PhoneNumber: "",
+        Address: "",
+        State: "",
+        City: "",
+        Zip: ""
+
+    })
 
     useEffect(() => {
         const s = State.getStatesOfCountry('PK')
         setStates(s);
-        console.log(States)
-        console.log(s)
     }, [])
 
     useEffect(() => {
         const s = City.getCitiesOfState('PK', SelectedState)
         setCities(s);
-        console.log(s)
 
     }, [SelectedState])
 
@@ -35,7 +43,13 @@ const CheckoutPage = () => {
         setSelectedState(e.target.value)
         console.log(e.target.value);
     }
+
+    const handleDataChange = (e) => {
+        setData({ ...Data, [e.target.name]: e.target.value })
+    }
+
     const handleCheckout = () => {
+
         setStep(3);
         navigate("/checkout")
     }
@@ -61,7 +75,7 @@ const CheckoutPage = () => {
                             <div className='mt-4 w-full max-w-[700px] mb-9'>
                                 <div className='w-full mt-5'>
                                     <div className='font-medium'>Full Name</div>
-                                    <input type="text" style={{ backgroundColor: color.bg1 }} className=' text-[14px] border p-2 text-gray-500 rounded w-full border-gray-300 focus:border-blue-500  outline-0 outline-blue-500/20 outline-offset-0 focus:outline-4 transition-all duration-100' placeholder='Enter Full Name' />
+                                    <input type="text" style={{ backgroundColor: color.bg1 }} name='FullName' onChange={handleDataChange} className=' text-[14px] border p-2 text-gray-500 rounded w-full border-gray-300 focus:border-blue-500  outline-0 outline-blue-500/20 outline-offset-0 focus:outline-4 transition-all duration-100' placeholder='Enter Full Name' />
                                 </div>
 
                                 <div className='flex mt-5 gap-3 w-full flex-col md:flex-row '>
@@ -77,13 +91,8 @@ const CheckoutPage = () => {
                                 </div>
 
                                 <div className='w-full mt-5'>
-                                    <div className='font-medium'>Address Line 1</div>
-                                    <input type="text" placeholder='Address Line 1' style={{ backgroundColor: color.bg1 }} className='text-[14px] border p-2 text-gray-500 rounded w-full border-gray-300 focus:border-blue-500  outline-0 outline-blue-500/20 outline-offset-0 focus:outline-4 transition-all duration-100' />
-                                </div>
-
-                                <div className='w-full mt-5'>
-                                    <div className='font-medium'>Address Line 2</div>
-                                    <input type="text" placeholder='Address Line 2' style={{ backgroundColor: color.bg1 }} className='text-[14px] border p-2 text-gray-500 rounded w-full border-gray-300 focus:border-blue-500  outline-0 outline-blue-500/20 outline-offset-0 focus:outline-4 transition-all duration-100' />
+                                    <div className='font-medium'>Address</div>
+                                    <input type="text" placeholder='Address Line' style={{ backgroundColor: color.bg1 }} className='text-[14px] border p-2 text-gray-500 rounded w-full border-gray-300 focus:border-blue-500  outline-0 outline-blue-500/20 outline-offset-0 focus:outline-4 transition-all duration-100' />
                                 </div>
 
                                 <div className='flex gap-3 mt-5 w-full flex-col md:flex-row '>
