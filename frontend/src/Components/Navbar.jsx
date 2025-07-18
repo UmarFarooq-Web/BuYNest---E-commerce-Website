@@ -19,7 +19,7 @@ const Navbar = () => {
 
     const handleSearch = () =>{
         if(SearchText.trim == '') return
-        navigate(`/products?searchtext=${SearchText}`)
+        navigate(`/products?search=${SearchText}`)
     }
 
 

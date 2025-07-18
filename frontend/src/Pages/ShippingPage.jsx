@@ -6,6 +6,8 @@ import logo from "/logo.jpg"
 import { Country, State, City } from 'country-state-city';
 import { useStep } from '../StepProvider'
 import { useNavigate } from 'react-router-dom'
+import toast from 'react-hot-toast'
+import useStore from '../store/useStore'
 
 const CheckoutPage = () => {
     const [States, setStates] = useState([])
@@ -17,8 +19,8 @@ const CheckoutPage = () => {
 
     const navigate = useNavigate();
 
-    const { Data, setData } = useState({
-        FullName: "sdsd",
+    const [ Data, setData ] = useState({
+        FullName: "",
         Email: "",
         PhoneNumber: "",
         Address: "",
@@ -27,6 +29,8 @@ const CheckoutPage = () => {
         Zip: ""
 
     })
+
+    const {setUserData , userData} = useStore()
 
     useEffect(() => {
         const s = State.getStatesOfCountry('PK')
@@ -49,6 +53,15 @@ const CheckoutPage = () => {
     }
 
     const handleCheckout = () => {
+
+        // if(!Data.FullName) return toast.error("Full Name is Required")
+        // if(!Data.Email) return toast.error("Email is Required")
+        // if(!Data.PhoneNumber) return toast.error("PhoneNumber is Required")
+        // if(!Data.Address) return toast.error("Address is Required")
+        // if(!Data.State) return toast.error("State is Required")
+        // if(!Data.City) return toast.error("City is Required")
+
+        setUserData({...userData , Data} )
 
         setStep(3);
         navigate("/checkout")
@@ -75,31 +88,32 @@ const CheckoutPage = () => {
                             <div className='mt-4 w-full max-w-[700px] mb-9'>
                                 <div className='w-full mt-5'>
                                     <div className='font-medium'>Full Name</div>
-                                    <input type="text" style={{ backgroundColor: color.bg1 }} name='FullName' onChange={handleDataChange} className=' text-[14px] border p-2 text-gray-500 rounded w-full border-gray-300 focus:border-blue-500  outline-0 outline-blue-500/20 outline-offset-0 focus:outline-4 transition-all duration-100' placeholder='Enter Full Name' />
+                                    <input type="text" style={{ backgroundColor: color.bg1 }} value={Data.FullName} name='FullName' onChange={handleDataChange} className=' text-[14px] border p-2 text-gray-500 rounded w-full border-gray-300 focus:border-blue-500  outline-0 outline-blue-500/20 outline-offset-0 focus:outline-4 transition-all duration-100' placeholder='Enter Full Name' />
                                 </div>
 
                                 <div className='flex mt-5 gap-3 w-full flex-col md:flex-row '>
                                     <div className='w-full  md:w-[50%]'>
                                         <div className='font-medium'>Email</div>
-                                        <input type='text' placeholder='Enter Email' style={{ backgroundColor: color.bg1 }} name="cardType" id="cardType" className=' text-[14px] p-2 text-gray-500 border w-full border-gray-300 rounded focus:border-blue-500  outline-0 outline-blue-500/20 outline-offset-0 focus:outline-4 transition-all duration-100' />
+                                        <input type='text' placeholder='Enter Email' style={{ backgroundColor: color.bg1 }} value={Data.Email} name='Email' onChange={handleDataChange} id="cardType" className=' text-[14px] p-2 text-gray-500 border w-full border-gray-300 rounded focus:border-blue-500  outline-0 outline-blue-500/20 outline-offset-0 focus:outline-4 transition-all duration-100' />
                                     </div>
 
                                     <div className='w-full md:w-[50%]'>
                                         <div className='font-medium'>Phone</div>
-                                        <input type="text" placeholder="Enter Phone Number" style={{ backgroundColor: color.bg1 }} className='text-[14px] border p-2 text-gray-500 rounded w-full border-gray-300 focus:border-blue-500  outline-0 outline-blue-500/20 outline-offset-0 focus:outline-4 transition-all duration-100' />
+                                        <input type="text" placeholder="Enter Phone Number" style={{ backgroundColor: color.bg1 }}value={Data.PhoneNumber} name='PhoneNumber' onChange={handleDataChange} className='text-[14px] border p-2 text-gray-500 rounded w-full border-gray-300 focus:border-blue-500  outline-0 outline-blue-500/20 outline-offset-0 focus:outline-4 transition-all duration-100' />
                                     </div>
                                 </div>
 
                                 <div className='w-full mt-5'>
                                     <div className='font-medium'>Address</div>
-                                    <input type="text" placeholder='Address Line' style={{ backgroundColor: color.bg1 }} className='text-[14px] border p-2 text-gray-500 rounded w-full border-gray-300 focus:border-blue-500  outline-0 outline-blue-500/20 outline-offset-0 focus:outline-4 transition-all duration-100' />
+                                    <input type="text" placeholder='Address Line' style={{ backgroundColor: color.bg1 }} value={Data.Address} name='Address' onChange={handleDataChange} className='text-[14px] border p-2 text-gray-500 rounded w-full border-gray-300 focus:border-blue-500  outline-0 outline-blue-500/20 outline-offset-0 focus:outline-4 transition-all duration-100' />
                                 </div>
 
                                 <div className='flex gap-3 mt-5 w-full flex-col md:flex-row '>
 
                                     <div className='grow'>
                                         <div className='font-medium'>State</div>
-                                        <select onChange={HandStateChange} style={{ backgroundColor: color.bg1 }} name="cardType" id="cardType" className=' text-[14px] p-2 text-gray-500 border w-full border-gray-300  rounded focus:border-blue-500  outline-0 outline-blue-500/20 outline-offset-0 focus:outline-4 transition-all duration-100'>
+                                        <select onChange={(e)=>{HandStateChange(e) ; handleDataChange(e)}} value={Data.State} name="State" style={{ backgroundColor: color.bg1 }} id="cardType" className=' text-[14px] p-2 text-gray-500 border w-full border-gray-300  rounded focus:border-blue-500  outline-0 outline-blue-500/20 outline-offset-0 focus:outline-4 transition-all duration-100'>
+                                            <option value="">-Select-</option>
                                             {States.length > 0 && States.map((e, i) => (
                                                 <option value={e.isoCode}>{e.name}</option>
                                             ))}
@@ -107,7 +121,8 @@ const CheckoutPage = () => {
                                     </div>
                                     <div className='grow'>
                                         <div className='font-medium'>City</div>
-                                        <select style={{ backgroundColor: color.bg1 }} name="cardType" id="cardType" className=' text-[14px] p-2 text-gray-500 border w-full border-gray-300 rounded focus:border-blue-500  outline-0 outline-blue-500/20 outline-offset-0 focus:outline-4 transition-all duration-100'>
+                                        <select style={{ backgroundColor: color.bg1 }} value={Data.City} onChange={handleDataChange}  name="City" id="cardType" className=' text-[14px] p-2 text-gray-500 border w-full border-gray-300 rounded focus:border-blue-500  outline-0 outline-blue-500/20 outline-offset-0 focus:outline-4 transition-all duration-100'>
+                                            <option value="">-Select-</option>
                                             {Cities.length > 0 && Cities.map((e, i) => (
                                                 <option value={e.isoCode}>{e.name}</option>
                                             ))}
@@ -117,7 +132,7 @@ const CheckoutPage = () => {
 
                                     <div className=''>
                                         <div className='font-medium'>Zip</div>
-                                        <input type="text" style={{ backgroundColor: color.bg1 }} className=' border p-1 text-gray-500 rounded w-full border-gray-300 focus:border-blue-500  outline-0 outline-blue-500/20 outline-offset-0 focus:outline-4 transition-all duration-100' placeholder='Enter Zip code' />
+                                        <input type="text" style={{ backgroundColor: color.bg1 }} value={Data.Zip} name='Zip' onChange={handleDataChange} className=' border p-1 text-gray-500 rounded w-full border-gray-300 focus:border-blue-500  outline-0 outline-blue-500/20 outline-offset-0 focus:outline-4 transition-all duration-100' placeholder='Enter Zip code' />
                                     </div>
                                 </div>
 

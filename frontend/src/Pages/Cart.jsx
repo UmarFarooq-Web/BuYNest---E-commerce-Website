@@ -14,25 +14,16 @@ import { Link } from 'react-router-dom'
 import NoItemsInCart from '../Components/EmptyCart.jsx'
 
 const Cart = () => {
-    const [Quantity, setQuantity] = useState(1)
     const { setStep } = useStep();
     const navigate = useNavigate()
     const [ProductsData, setProductsData] = useState(null);
     const [IsLoadingCart, setIsLoadingCart] = useState(false);
     
-    const { cartProducts, setCartProducts } = useStore();
-
-    const handleIncrement = () => {
-        setQuantity(Quantity + 1)
-    }
-
-    const handleDecrement = () => {
-        if (Quantity > 1) {
-            setQuantity(Quantity - 1)
-        }
-    }
+    const { cartProducts, setCartProducts , setUserData } = useStore();
 
     const handleCheckout = () => {
+        setUserData({OrderItems:cartProducts , Total:getSubTotal()})
+        
         setStep(2);
         navigate("/shipping")
     }
@@ -80,7 +71,6 @@ const Cart = () => {
                 setIsLoadingCart(true)
                 const res = await UserInstance.post("/get-cart-products", { Products: JSON.stringify(cartProducts) })
                 setProductsData(res.data.data);
-                console.log(res.data.data)
             } catch (error) {
                 toast.error(error?.response?.data?.message || "Internal server Error")
                 console.log("Error while fatching data for cart in cartPage : ", error)

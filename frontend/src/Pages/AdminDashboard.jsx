@@ -1,15 +1,51 @@
 import React, { useState } from 'react'
 import color from '../colors'
-import { CircleAlert, ClockFading, Star, Search, Check, Clock3, Rows, ChevronRight, ChevronLeft } from 'lucide-react'
+import { CircleAlert, ClockFading, Star, Search, Check, Clock3, Rows, ChevronRight, ChevronLeft, Loader } from 'lucide-react'
 import TotalSalesLineGraph from '../Components/TotalSalesLineGraph';
 import { data } from 'react-router-dom';
 import TotalOrdersBarChart from '../Components/TotalOrdersBarChart'
 import textpic2 from '/testpic2.jpeg'
 import StarRatings from 'react-star-ratings';
+import AdminInstance from '../axios/adminInstanse';
+import { useEffect } from 'react';
 
 const AdminDashboard = () => {
 
     const [LatestReviewSearchBarFocus, setLatestReviewSearchBarFocus] = useState(false)
+    const [ReviewsData , setReviewsData] = useState([])
+    const [Data , setData ] = useState(null);
+    const [IsDataLoading , setIsDataLoading] = useState(false)
+    const [SearchText , setSearchText] = useState('')
+    const [ReservedReviewsData , setReservedReviewsData ] = useState([])
+
+
+    async function FetchData() {
+        setIsDataLoading(true)
+        try {
+            const res = await AdminInstance.get('/dashboard')
+            console.log(res.data)
+            setData(res.data)
+            setReviewsData(res.data.Reviews)
+            setReservedReviewsData(res.data.Reviews)
+        } catch (error) {
+            console.log("Error in FetchData function in AdminDashboard : " , error)
+        }finally{
+            setIsDataLoading(false)
+        }
+    }
+
+    useEffect(()=>{
+
+        setReviewsData(ReservedReviewsData.filter((e)=>
+            e.Product.Title.toLowerCase().includes(SearchText.toLowerCase) ||
+            e.Customer.toLowerCase().includes(SearchText.toLowerCase()) ||
+            e.Review.toLowerCase().includes(SearchText.toLowerCase())
+        ))
+    } , [SearchText])
+
+    useEffect(()=>{
+        FetchData();
+    } , [])
 
     const [TotalSalesData, setTotalSalesData] = useState([
         {
@@ -90,152 +126,152 @@ const AdminDashboard = () => {
 
     // Reviews Section variables and functions
 
-    const ReviewsData = [
-        {
-            Product: "Wireless Headphones",
-            Customer: "Alice Johnson",
-            Rating: 4.5,
-            Review: "Great sound quality and battery life.",
-            Status: "APPROVED",
-            Time: 1720017000000
-        },
-        {
-            Product: "Smartphone Case",
-            Customer: "Bob Smith",
-            Rating: 4.0,
-            Review: "Fits perfectly. Good grip.",
-            Status: "PENDING",
-            Time: 1720000000000
-        },
-        {
-            Product: "Bluetooth Speaker",
-            Customer: "Charlie Brown",
-            Rating: 5.0,
-            Review: "Amazing bass and clarity!",
-            Status: "APPROVED",
-            Time: 1719990000000
-        },
-        {
-            Product: "USB-C Cable",
-            Customer: "Diana Prince",
-            Rating: 3.5,
-            Review: "Works fine, but a bit short.",
-            Status: "PENDING",
-            Time: 1719985000000
-        },
-        {
-            Product: "Gaming Mouse",
-            Customer: "Ethan Wright",
-            Rating: 4.8,
-            Review: "Perfect for FPS games.",
-            Status: "APPROVED",
-            Time: 1719972000000
-        },
-        {
-            Product: "LED Monitor",
-            Customer: "Fiona Davis",
-            Rating: 4.2,
-            Review: "Crisp display and good refresh rate.",
-            Status: "APPROVED",
-            Time: 1719960000000
-        },
-        {
-            Product: "Mechanical Keyboard",
-            Customer: "George Miller",
-            Rating: 4.6,
-            Review: "Love the tactile feedback.",
-            Status: "PENDING",
-            Time: 1719950000000
-        },
-        {
-            Product: "Fitness Tracker",
-            Customer: "Hannah Lee",
-            Rating: 4.0,
-            Review: "Helps keep track of steps and sleep.",
-            Status: "APPROVED",
-            Time: 1719940000000
-        },
-        {
-            Product: "Laptop Stand",
-            Customer: "Ian Thompson",
-            Rating: 3.8,
-            Review: "Build quality is okay.",
-            Status: "PENDING",
-            Time: 1719930000000
-        },
-        {
-            Product: "Portable SSD",
-            Customer: "Jenna Wilson",
-            Rating: 5.0,
-            Review: "Fast and reliable storage.",
-            Status: "APPROVED",
-            Time: 1719920000000
-        },
-        {
-            Product: "Smartwatch",
-            Customer: "Kevin Parker",
-            Rating: 4.3,
-            Review: "Very responsive and stylish.",
-            Status: "APPROVED",
-            Time: 1719910000000
-        },
-        {
-            Product: "Wireless Charger",
-            Customer: "Laura Kim",
-            Rating: 3.9,
-            Review: "Charges slowly with case on.",
-            Status: "PENDING",
-            Time: 1719900000000
-        },
-        {
-            Product: "Noise Cancelling Earbuds",
-            Customer: "Michael Scott",
-            Rating: 4.7,
-            Review: "Excellent noise reduction.",
-            Status: "APPROVED",
-            Time: 1719890000000
-        },
-        {
-            Product: "Ergonomic Chair",
-            Customer: "Nina Patel",
-            Rating: 4.1,
-            Review: "Comfortable for long hours.",
-            Status: "APPROVED",
-            Time: 1719880000000
-        },
-        {
-            Product: "4K Webcam",
-            Customer: "Oscar Brooks",
-            Rating: 4.0,
-            Review: "Great video quality.",
-            Status: "PENDING",
-            Time: 1719870000000
-        },
-        {
-            Product: "Tablet Stand",
-            Customer: "Paula Reed",
-            Rating: 3.6,
-            Review: "Slightly wobbly, but works.",
-            Status: "APPROVED",
-            Time: 1719860000000
-        },
-        {
-            Product: "Graphic Tablet",
-            Customer: "Quentin Ross",
-            Rating: 4.9,
-            Review: "Perfect for digital art.",
-            Status: "APPROVED",
-            Time: 1719850000000
-        },
-        {
-            Product: "Wireless Keyboard",
-            Customer: "Rachel Adams",
-            Rating: 4.2,
-            Review: "Nice key travel and build.",
-            Status: "PENDING",
-            Time: 1719840000000
-        }
-    ]
+    // const ReviewsData = [
+    //     {
+    //         Product: "Wireless Headphones",
+    //         Customer: "Alice Johnson",
+    //         Rating: 4.5,
+    //         Review: "Great sound quality and battery life.",
+    //         Status: "APPROVED",
+    //         Time: 1720017000000
+    //     },
+    //     {
+    //         Product: "Smartphone Case",
+    //         Customer: "Bob Smith",
+    //         Rating: 4.0,
+    //         Review: "Fits perfectly. Good grip.",
+    //         Status: "PENDING",
+    //         Time: 1720000000000
+    //     },
+    //     {
+    //         Product: "Bluetooth Speaker",
+    //         Customer: "Charlie Brown",
+    //         Rating: 5.0,
+    //         Review: "Amazing bass and clarity!",
+    //         Status: "APPROVED",
+    //         Time: 1719990000000
+    //     },
+    //     {
+    //         Product: "USB-C Cable",
+    //         Customer: "Diana Prince",
+    //         Rating: 3.5,
+    //         Review: "Works fine, but a bit short.",
+    //         Status: "PENDING",
+    //         Time: 1719985000000
+    //     },
+    //     {
+    //         Product: "Gaming Mouse",
+    //         Customer: "Ethan Wright",
+    //         Rating: 4.8,
+    //         Review: "Perfect for FPS games.",
+    //         Status: "APPROVED",
+    //         Time: 1719972000000
+    //     },
+    //     {
+    //         Product: "LED Monitor",
+    //         Customer: "Fiona Davis",
+    //         Rating: 4.2,
+    //         Review: "Crisp display and good refresh rate.",
+    //         Status: "APPROVED",
+    //         Time: 1719960000000
+    //     },
+    //     {
+    //         Product: "Mechanical Keyboard",
+    //         Customer: "George Miller",
+    //         Rating: 4.6,
+    //         Review: "Love the tactile feedback.",
+    //         Status: "PENDING",
+    //         Time: 1719950000000
+    //     },
+    //     {
+    //         Product: "Fitness Tracker",
+    //         Customer: "Hannah Lee",
+    //         Rating: 4.0,
+    //         Review: "Helps keep track of steps and sleep.",
+    //         Status: "APPROVED",
+    //         Time: 1719940000000
+    //     },
+    //     {
+    //         Product: "Laptop Stand",
+    //         Customer: "Ian Thompson",
+    //         Rating: 3.8,
+    //         Review: "Build quality is okay.",
+    //         Status: "PENDING",
+    //         Time: 1719930000000
+    //     },
+    //     {
+    //         Product: "Portable SSD",
+    //         Customer: "Jenna Wilson",
+    //         Rating: 5.0,
+    //         Review: "Fast and reliable storage.",
+    //         Status: "APPROVED",
+    //         Time: 1719920000000
+    //     },
+    //     {
+    //         Product: "Smartwatch",
+    //         Customer: "Kevin Parker",
+    //         Rating: 4.3,
+    //         Review: "Very responsive and stylish.",
+    //         Status: "APPROVED",
+    //         Time: 1719910000000
+    //     },
+    //     {
+    //         Product: "Wireless Charger",
+    //         Customer: "Laura Kim",
+    //         Rating: 3.9,
+    //         Review: "Charges slowly with case on.",
+    //         Status: "PENDING",
+    //         Time: 1719900000000
+    //     },
+    //     {
+    //         Product: "Noise Cancelling Earbuds",
+    //         Customer: "Michael Scott",
+    //         Rating: 4.7,
+    //         Review: "Excellent noise reduction.",
+    //         Status: "APPROVED",
+    //         Time: 1719890000000
+    //     },
+    //     {
+    //         Product: "Ergonomic Chair",
+    //         Customer: "Nina Patel",
+    //         Rating: 4.1,
+    //         Review: "Comfortable for long hours.",
+    //         Status: "APPROVED",
+    //         Time: 1719880000000
+    //     },
+    //     {
+    //         Product: "4K Webcam",
+    //         Customer: "Oscar Brooks",
+    //         Rating: 4.0,
+    //         Review: "Great video quality.",
+    //         Status: "PENDING",
+    //         Time: 1719870000000
+    //     },
+    //     {
+    //         Product: "Tablet Stand",
+    //         Customer: "Paula Reed",
+    //         Rating: 3.6,
+    //         Review: "Slightly wobbly, but works.",
+    //         Status: "APPROVED",
+    //         Time: 1719860000000
+    //     },
+    //     {
+    //         Product: "Graphic Tablet",
+    //         Customer: "Quentin Ross",
+    //         Rating: 4.9,
+    //         Review: "Perfect for digital art.",
+    //         Status: "APPROVED",
+    //         Time: 1719850000000
+    //     },
+    //     {
+    //         Product: "Wireless Keyboard",
+    //         Customer: "Rachel Adams",
+    //         Rating: 4.2,
+    //         Review: "Nice key travel and build.",
+    //         Status: "PENDING",
+    //         Time: 1719840000000
+    //     }
+    // ]
 
     const RowsPerPage = 5;
     const [Page, setPage] = useState(0)
@@ -280,7 +316,11 @@ const AdminDashboard = () => {
 
     }
 
+    
+    
+
     return (
+        IsDataLoading ? <div className='w-full h-screen flex justify-center items-center text-blue-500' ><Loader size={40} className='animate-spin' /></div>:
         <div >
             {/* Graph section */}
             <div className='flex flex-col 2xl:flex-row border-b border-gray-400' style={{ backgroundColor: color.bg2 }}>
@@ -293,7 +333,7 @@ const AdminDashboard = () => {
                                 <Star size={50} className='text-green-400' />
                             </span>
                             <span>
-                                <h2 className='text-xl font-bold'>67 new Orders</h2>
+                                <h2 className='text-xl font-bold'>{Data?.TotalOrders} new Orders</h2>
                                 <p>Awaiting Processing</p>
                             </span>
                         </div>
@@ -302,7 +342,7 @@ const AdminDashboard = () => {
                                 <ClockFading size={50} className='text-blue-400' />
                             </span>
                             <span>
-                                <h2 className='text-xl font-bold'>6 Order</h2>
+                                <h2 className='text-xl font-bold'>{Data?.PendingOrders} Order</h2>
                                 <p>On Hold</p>
                             </span>
                         </div>
@@ -311,7 +351,7 @@ const AdminDashboard = () => {
                                 <CircleAlert size={50} className='text-red-300' />
                             </span>
                             <span>
-                                <h2 className='text-xl font-bold'>12 Products</h2>
+                                <h2 className='text-xl font-bold'>{Data?.OutOfStockProducts} Products</h2>
                                 <p>Out of Stock</p>
                             </span>
                         </div>
@@ -359,15 +399,15 @@ const AdminDashboard = () => {
                     <div className='lg:mt-6 md:mt-5 sm:mt-3 mt-2 flex justify-between'>
                         <div className='bg-white w-[33%] p-3 rounded-xl border border-gray-400'>
                             <div className='font-bold text-xl'>Total Sales :    </div>
-                            <div className='text-center font-bold text-2xl text-blue-600'>$14140</div>
+                            <div className='text-center font-bold text-2xl text-blue-600'>${Data?.TotalSales}</div>
                         </div>
                         <div className='bg-white w-[33%] p-3 rounded-xl border border-gray-400'>
                             <div className='font-bold text-xl'>Total Profit :    </div>
-                            <div className='text-center font-bold text-2xl text-blue-600'>$14140</div>
+                            <div className='text-center font-bold text-2xl text-blue-600'>$1{Data?.TotalProfit}</div>
                         </div>
                         <div className='bg-white w-[33%] p-3 rounded-xl border border-gray-400'>
                             <div className='font-bold text-xl'>Total Orders :    </div>
-                            <div className='text-center font-bold text-2xl text-blue-600'>140</div>
+                            <div className='text-center font-bold text-2xl text-blue-600'>{Data?.TotalOrders}</div>
                         </div>
                     </div>
                 </div>
@@ -385,7 +425,7 @@ const AdminDashboard = () => {
                     </div>
                     <div className={`flex text-gray-400 items-center gap-2 border transition-all duration-100 ${LatestReviewSearchBarFocus ? 'border-blue-500' : 'border-gray-400'} py-1 px-2 w-[400px] rounded `}>
                         <Search size={20} />
-                        <input type="text" placeholder='Search' className='outline-none placeholder:text-gray-400 text-black' onFocus={() => setLatestReviewSearchBarFocus(true)} onBlur={() => setLatestReviewSearchBarFocus(false)} />
+                        <input type="text" placeholder='Search' value={SearchText} onChange={(e)=>setSearchText(e.target.value)} className='outline-none placeholder:text-gray-400 text-black' onFocus={() => setLatestReviewSearchBarFocus(true)} onBlur={() => setLatestReviewSearchBarFocus(false)} />
                     </div>
                 </div>
 
@@ -402,10 +442,9 @@ const AdminDashboard = () => {
                             <div className='w-[7%]'>Time</div>
                         </div>
                         {PaginatedReviewsData.map((e, i) => (<div key={i} className='flex justify-between items-center h-[75px] border-b border-gray-300 py-2'>
-                            <div className='w-[4%] h-[50px] lg:h-[60px] border border-gray-300 rounded flex justify-center items-center p-1 overflow-hidden'><img src={textpic2} alt="" /></div>
-                            <div className='w-[21%] overflow-hidden '> <a href="#" className='text-blue-600  hover:underline overflow-ellipsis overflow-hidden block  whitespace-nowrap' > {e.Product}</a></div>
+                            <div className='w-[4%] h-[50px] lg:h-[60px] border border-gray-300 rounded flex justify-center items-center p-1 overflow-hidden'><img src={e.Product.Image} alt="" /></div>
+                            <div className='w-[21%] overflow-hidden '> <a href={`/product/${e.Product._id}`} target='_blank' className='text-blue-600  hover:underline overflow-ellipsis overflow-hidden block  whitespace-nowrap' > {e.Product.Title}</a></div>
                             <div className='w-[15%] flex items-center gap-2'>
-                                <div className='w-[40px] h-[40px] overflow-hidden rounded-full' ><img className='w-full h-full' src={textpic2} alt="" /></div>
                                 <div className='text-[15px] font-[500]' >{e.Customer}</div>
                             </div>
                             <div className='w-[7%]'>
@@ -421,9 +460,9 @@ const AdminDashboard = () => {
                             <div className='w-[30%] h-full overflow-y-auto'>{e.Review}</div>
                             <div className='w-[9%] flex'>
                                 {
-                                    e.Status == "APPROVED" ? <div className='border rounded border-[#90D67F] text-[#1C6E3D] bg-[#D9FBD0] py-0.5 px-1 text-[10px] flex gap-0.5 font-medium' >APPROVED<Check size={15} /></div>
+                                    e.Status == "APPROVED" ? <div className='border rounded border-[#90D67F] text-[#1C6E3D] bg-[#D9FBD0] py-0.5 px-1 text-[10px] flex gap-0.5 font-medium' >Publish<Check size={15} /></div>
                                         :
-                                        <div className='border rounded border-[#FFCC85] text-[#BC3803] bg-[#FFEFCA] py-0.5 px-1 text-[10px] flex gap-0.5 font-medium' >PENDING<Clock3 size={15} /></div>
+                                        <div className='border rounded border-[#90D67F] text-[#1C6E3D] bg-[#D9FBD0] py-0.5 px-1 text-[10px] flex gap-0.5 font-medium' >Publish<Check size={15} /></div>
                                 }
                             </div>
                             <div className='w-[7%]'>{getTimeFormatFormReviews(e.Time)}</div>

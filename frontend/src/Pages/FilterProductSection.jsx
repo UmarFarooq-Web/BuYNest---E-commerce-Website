@@ -5,13 +5,34 @@ import SubNavbar from '../Components/SubNavbar'
 import ProductCard from "../Components/ProductCard"
 import { Funnel, X, ChevronDown } from 'lucide-react'
 import logo from "/logo.jpg"
+import { useLocation } from 'react-router-dom'
+import toast from 'react-hot-toast'
+import UserInstance from '../axios/userInstanse.js'
+import { Loader } from 'lucide-react'
 
 
 
 const FilterProductSection = () => {
   const [IsOpen, setIsOpen] = useState(false);
+  const [IsProductsLoading, setIsProductsLoading] = useState(false)
+  const [Products, setProducts] = useState([])
+  const [Availability, setAvailability] = useState('all');
+  const [Min, setMin] = useState("");
+  const [Max, setMax] = useState("")
+  const [Go , setGo] = useState(false)
 
 
+  const handleMinChange = (e) => {
+    setMin(e.target.value)
+  }
+
+  const handleMaxChange = (e) => {
+    setMax(e.target.value)
+  }
+
+  const handleAvailabilityChange = () => {
+    setAvailability(e.target.value);
+  }
 
   useEffect(() => {
     if (IsOpen) {
@@ -22,6 +43,34 @@ const FilterProductSection = () => {
     }
 
   }, [IsOpen])
+
+  const { search } = useLocation()
+
+  async function fun() {
+    setIsProductsLoading(true)
+
+    try {
+      console.log("search Text :  " + search)
+      const safeSearch = search == ""?"?":search
+      const params = new URLSearchParams(safeSearch);
+      if (Availability) params.set("availability", Availability);
+      if (Min) params.set("min", Min);
+      if (Max) params.set("max", Max);
+
+      const res = await UserInstance.get(`/getFilteredProducts?${params.toString()}`);
+      setProducts(res.data)
+      console.log(res.data);
+    } catch (error) {
+      console.log("Error in useEffect in FilterProducttSecion : ", error)
+      toast.error("Interal Server Error");
+    } finally {
+      setIsProductsLoading(false)
+    }
+  }
+
+  useEffect(() => {
+    fun()
+  }, [search , Availability , Go])
 
 
   return (
@@ -42,15 +91,15 @@ const FilterProductSection = () => {
               <summary className='list-none text-[16px] sm:text-[16px] md:text-[18px] font-semibold mt-3 sm:mt-4 md:mt-6 flex justify-between '><span>Availability</span> <span><ChevronDown /></span></summary>
               <div>
                 <div className='flex  gap-2'>
-                  <input type="radio" id='availability1' name='availability' />
+                  <input type="radio" id='availability1' onChange={handleAvailabilityChange} value={'all'} defaultChecked name='availability' />
                   <label htmlFor="availability1">All</label>
                 </div>
                 <div className='flex  gap-2' >
-                  <input type="radio" id='availability2' name='availability' />
+                  <input type="radio" id='availability2' onChange={handleAvailabilityChange} value={"in"} name='availability' />
                   <label htmlFor="availability2">In Stock</label>
                 </div>
                 <div className='flex  gap-2' >
-                  <input type="radio" id='availability3' name='availability' />
+                  <input type="radio" id='availability3' onChange={handleAvailabilityChange} value='out' name='availability' />
                   <label htmlFor="availability3">Out of Stock</label>
                 </div>
               </div>
@@ -58,49 +107,12 @@ const FilterProductSection = () => {
 
 
             <details open className=''>
-              <summary className='list-none text-[16px] sm:text-[16px] md:text-[18px] font-semibold mt-3 sm:mt-4 md:mt-6 flex justify-between '><span>Color</span> <span><ChevronDown /></span></summary>
-              <div className='mt-[7px]'>
-                <div className='flex  gap-2'>
-                  <input type="checkbox" id='color1' name='color' />
-                  <label htmlFor="color1">All</label>
-                </div>
-                <div className='flex  gap-2' >
-                  <input type="checkbox" id='color2' name='color' />
-                  <label htmlFor="color2">In Stock</label>
-                </div>
-                <div className='flex  gap-2' >
-                  <input type="checkbox" id='color3' name='color' />
-                  <label htmlFor="color3">Out of Stock</label>
-                </div>
-              </div>
-            </details>
-
-
-             <details open className=''>
-              <summary className=' list-none text-[16px] sm:text-[16px] md:text-[18px] font-semibold mt-3 sm:mt-4 md:mt-6 flex justify-between '><span>Brand</span> <span><ChevronDown /></span></summary>
-              <div className='mt-[7px]'>
-                <div className='flex  gap-2'>
-                  <input type="checkbox" id='brand1' name='brand' />
-                  <label htmlFor="brand1">All</label>
-                </div>
-                <div className='flex  gap-2' >
-                  <input type="checkbox" id='brand2' name='brand' />
-                  <label htmlFor="brand2">In Stock</label>
-                </div>
-                <div className='flex  gap-2' >
-                  <input type="checkbox" id='brand3' name='brand' />
-                  <label htmlFor="brand3">Out of Stock</label>
-                </div>
-              </div>
-            </details>
-
-            <details open className=''>
               <summary className='list-none text-[16px] sm:text-[16px] md:text-[18px] font-semibold mt-3 sm:mt-4 md:mt-6 flex justify-between '><span>Price range</span> <span><ChevronDown /></span></summary>
               <div className='flex mt-[7px]'>
-                <input className='border border-gray-300 focus:border-blue-500 w-[90px] p-2 rounded-tl-[10px] rounded-bl-[10px] text-[14px] outline-0 outline-blue-500/20 outline-offset-0 focus:outline-4 transition-all duration-100' type="text"  placeholder='Min' />
-                <input className='border border-gray-300 focus:border-blue-500 w-[90px] p-2 rounded-tr-[10px] rounded-br-[10px] text-[14px] outline-0 outline-blue-500/20 outline-offset-0 focus:outline-4 transition-all duration-100' type="text" placeholder='Max' />
-                <button className='py-2 px-3 rounded hover:bg-gray-300 text-blue-500 text-[12px] font-bold ml-[10px] cursor-pointer border border-gray-300'>Go</button>
-                
+                <input onChange={handleMinChange} value={Min} className='border  border-gray-300 focus:border-blue-500 w-[90px] p-2 rounded-tl-[10px] rounded-bl-[10px] text-[14px] outline-0 outline-blue-500/20 outline-offset-0 focus:outline-4 transition-all duration-100' type="text" placeholder='Min' />
+                <input onChange={handleMaxChange} value={Max} className='border border-gray-300 focus:border-blue-500 w-[90px] p-2 rounded-tr-[10px] rounded-br-[10px] text-[14px] outline-0 outline-blue-500/20 outline-offset-0 focus:outline-4 transition-all duration-100' type="text" placeholder='Max' />
+                <button onClick={()=>setGo(pre=>!pre)} className='py-2 px-3 rounded hover:bg-gray-300 text-blue-500 text-[12px] font-bold ml-[10px] cursor-pointer border border-gray-300'>Go</button>
+
               </div>
             </details>
 
@@ -112,18 +124,10 @@ const FilterProductSection = () => {
           <div>
             <button onClick={() => { setIsOpen(!IsOpen) }} className='lg:hidden flex items-center border border-gray-300  text-gray-500 text-[12px] rounded my-5 p-2 '><Funnel size={22} />Filters</button>
             <div className='grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-3 sm:grid-cols-3 grid-cols-2 gap-1'>
-              <ProductCard />
-              <ProductCard />
-              <ProductCard />
-              <ProductCard />
-              <ProductCard />
-              <ProductCard />
-              <ProductCard />
-              <ProductCard />
-              <ProductCard />
-              <ProductCard />
-              <ProductCard />
-              <ProductCard />
+              {IsProductsLoading ? <div className=' text-blue-500 grow flex justify-center' ><Loader size={40} className='animate-spin' /></div> : Products.length == 0 ? <div className='grow' >No Product Found</div> : Products.map((e) => (
+                <ProductCard product={e} />
+                // <div>{e}</div>
+              ))}
 
             </div>
           </div>

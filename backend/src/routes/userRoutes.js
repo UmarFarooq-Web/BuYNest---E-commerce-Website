@@ -2,6 +2,7 @@ import express from 'express';
 import Product from '../models/Product.model.js';
 import ReviewModel from "../models/Review.model.js"
 import multer from 'multer';
+import OrderModel from '../models/Order.model.js';
 
 
 const upload = multer()
@@ -136,5 +137,97 @@ userRoutes.post("/get-cart-products", async (req, res) => {
 
 
 })
+
+userRoutes.post("/place-order", async (req, res) => {
+    const Data = req.body
+
+
+    try {
+
+
+        const order = new OrderModel({
+            Data: Data.Data.Data,
+            OrderItems: Data.OrderItems,
+            Payment: {
+                PaymentType: Data.Data.PaymentType,
+                CardData: Data.Data.CardData ? Data.Data.CardData : null
+            },
+            Total: Data.Data.Total,
+            OrderStatus: "Pending"
+        })
+
+        await order.save();
+        res.status(200).json({ message: "Ordered successfull" })
+    } catch (error) {
+        console.log("Error in /place order endpoint : ", error)
+        res.status(400).json({ message: "Interal Server Error" })
+    }
+})
+
+
+userRoutes.get('/getFilteredProducts', async (req, res) => {
+    try {
+        const searchText = req.query.search || "";
+        const availability = req.query.availability || "all"
+        const minPrice = parseFloat(req.query.min) || 0;
+        const maxPrice = parseFloat(req.query.max) || Number.MAX_SAFE_INTEGER;
+
+        console.log("Search:", searchText);
+        console.log("Availability:", availability);
+        console.log("Price Range:", minPrice, "-", maxPrice);
+
+        // Start building filter
+        const filter = {
+            $and: [
+                {
+                    $or: [
+                        { Title: { $regex: searchText, $options: 'i' } },
+                        { Brand: { $regex: searchText, $options: 'i' } },
+                        { Category: { $regex: searchText, $options: 'i' } },
+                        { SubCategory: { $regex: searchText, $options: 'i' } },
+                        { 'Description.text': { $regex: searchText, $options: 'i' } },
+                    ]
+                },
+                {
+                    $or: [
+                        { SalePrice: { $gte: minPrice, $lte: maxPrice } }
+                    ]
+                }
+            ]
+        };
+
+        // Handle availability
+        if (availability === "in") {
+            filter.$and.push({ Quantity: { $gt: 0 } });
+        } else if (availability === "out") {
+            filter.$and.push({ Quantity: { $lte: 0 } });
+        }
+
+        const results = await Product.find(filter, {
+            _id: 1,
+            Title: 1,
+            RegularPrice: 1,
+            SalePrice: 1,
+            Images: 1,
+        });
+
+        const finalProducts = results.map((e) => ({
+            _id: e._id,
+            Title: e.Title,
+            RegularPrice: e.RegularPrice,
+            SalePrice: e.SalePrice,
+            Image: e.Images?.[0] || "",
+            Rating: 4.5,
+            Reviews: 356
+        }));
+
+        res.status(200).json(finalProducts);
+    } catch (error) {
+        console.error("Error in /getFilteredProducts:", error);
+        res.status(500).json({ message: "Internal Server Error" });
+    }
+});
+
+
 
 export default userRoutes;

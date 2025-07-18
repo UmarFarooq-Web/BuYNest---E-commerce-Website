@@ -1,23 +1,28 @@
 import mongoose from "mongoose";
 
 const orderSchema = new mongoose.Schema({
-  CustomerId:String,
-  ShippingAddress: {
-    addressLine1: String,
-    addressLine2: String,
-    city: String,
-    state: String,
-    zipCode: String,
-    country: String
+  Data: {
+    FullName:String,
+    Email:String,
+    PhoneNumber:String,
+    Address: String,
+    City: String,
+    State: String,
+    Zip: String
   },
   OrderItems: [{
     ProductId: String,
     Quantity: Number
   }],
+  Payment:{
+    PaymentType:String,
+    CardData:Object
+  },
   Total: Number,
-  PaymentStatus: { type: String, enum: ['Paid', 'COD'], default: 'COD' },
   OrderStatus: { type: String, enum: ['Pending', 'Confirmed','Cancelled'], default: 'Pending' },
 
 });
 
-module.exports = mongoose.model('Order', orderSchema);
+const OrderModel = mongoose.model('Order', orderSchema);
+
+export default OrderModel

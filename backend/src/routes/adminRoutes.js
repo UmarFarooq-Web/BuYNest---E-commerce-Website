@@ -3,6 +3,8 @@ import express from 'express'
 import multer from 'multer'
 import uploadFromBuffer from "../utils/cloudinaryUpload.js"
 import Product from '../models/Product.model.js';
+import OrderModel from '../models/Order.model.js';
+import ReviewModel from '../models/Review.model.js';
 
 const AdminRouter = express.Router();
 
@@ -83,25 +85,101 @@ AdminRouter.get('/get-products', async (req, res) => {
 
     const skip = (page - 1) * limit;
 
-    try{
+    try {
 
         const total = await Product.countDocuments(searchQuery);
         const products = await Product.find(searchQuery).skip(skip).limit(limit);
-        
-        
+
+
         res.status(200).json({
             products,
             totalProducts: total,
             pages: Math.ceil(total / limit),
             currentPage: page,
-            
+
         })
-    }catch(error){
-        console.log("Error in /admin/get-product : " , error)
-        res.status(500).json({message:"Error while fetching data"})
+    } catch (error) {
+        console.log("Error in /admin/get-product : ", error)
+        res.status(500).json({ message: "Error while fetching data" })
     }
 
 
+})
+
+
+AdminRouter.get('/orders', async (req, res) => {
+    try {
+        const orders = await OrderModel.find().sort({ createdAt: -1 });
+
+        const formattedOrders = orders.map((order, index) => ({
+            OrderId: `ORD${1000 + index + 1}`,
+            Customer: order.Data.FullName,
+            Email: order.Data.Email,
+            Phone: order.Data.PhoneNumber,
+            Total: order.Total,
+            OrderStatus: order.OrderStatus,
+            PaymentType: order.Payment.PaymentType,
+            Date: order._id.getTimestamp().toISOString().split('T')[0],
+        }));
+
+        res.status(200).json(formattedOrders);
+    } catch (err) {
+        console.error("Error fetching formatted orders:", err);
+        res.status(500).json({ message: "Internal Server Error" });
+    }
+});
+
+AdminRouter.get("/dashboard", async (req, res) => {
+    const TotalOrders = await OrderModel.countDocuments();
+    const PendingOrders = await OrderModel.countDocuments({ OrderStatus: "Pending" })
+    const OutOfStockProducts = await Product.countDocuments({ Quantity: 0 })
+    const TotalSalesArray = await OrderModel.find().select({ Total: 1 })
+
+    let TotalSales = 0
+
+    TotalSalesArray.forEach(element => {
+        TotalSales += element.Total
+    });
+
+
+    const TotalProfit = (TotalSales * 0.40).toFixed(2)
+
+    const RawReviews = await ReviewModel.find()
+    console.log(RawReviews);
+
+    const Reviews = await Promise.all(
+        RawReviews.map(async (e) => {
+            const product = await Product.findById(e.ProductId).select({_id:1 , Title:1 , Images:1}); // Only fetch Title if needed
+            return {
+                Product: {_id:product._id , Title:product.Title , Image:product.Images[0]},
+                Customer: e.Name,
+                Rating: e.Rating,
+                Review: e.Review,
+                Status: e.Status,
+                Time: e.createdAt,
+            };
+        })
+    );
+
+    // {
+    //     Product: "Wireless Headphones",
+    //     Customer: "Alice Johnson",
+    //     Rating: 4.5,
+    //     Review: "Great sound quality and battery life.",
+    //     Status: "APPROVED",
+    //     Time: 1720017000000
+    // },
+
+
+    const finalFile = {
+        TotalOrders,
+        PendingOrders,
+        OutOfStockProducts,
+        TotalSales,
+        TotalProfit,
+        Reviews
+    }
+    res.status(200).json(finalFile)
 })
 
 export default AdminRouter

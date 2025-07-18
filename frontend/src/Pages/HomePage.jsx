@@ -43,7 +43,7 @@ const HomePage = () => {
       <Navbar />
       <SubNavbar />
       <div className='px-6' style={{ backgroundColor: color.bg2 }}>
-        <CategoryBar />
+        {/* <CategoryBar /> */}
         <div className='m-auto w-full  max-w-[1700px]'>
           <img className='rounded-xl w-fit' src={banner} alt="" />
 
@@ -57,12 +57,6 @@ const HomePage = () => {
 
           <hr className='my-10' />
 
-
-          <div className='flex flex-col items-center'>
-            <p className='text-2xl'>Want to have the <strong>ultimate customer</strong> experience?</p>
-            <h1 className='text-5xl font-bold'>Become a <span style={{ color: color.Blue }} >member</span> today!</h1>
-            <button className='px-10 py-3 flex items-center text-white rounded  bg-[#3874FF] hover:bg-[#004DFF] border border-[#3874FF] hover:border-gray-500 cursor-pointer mt-5'>Sign up<ChevronRight className='mt-1' /></button>
-          </div>
 
 
           <hr className='my-10' />
